@@ -1,11 +1,10 @@
 using UnityEditor;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public static class BuildUtils
     {
-
-        public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/";
+        public const string SETUPS_REL_DIRECTORY = "Assets/Plugins/build-tool/Editor/BuildTools/";
         private const string WINDOWS_EXTENSION = ".exe";
         public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
         {

@@ -6,7 +6,7 @@ using System.Diagnostics;
 using UnityEditor.Build.Reporting;
 #endif
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public class EnhancedBuildsWindow : EditorWindow
     {
@@ -300,9 +300,7 @@ namespace Himeki.Build
                 b.detailedBuildReport = EditorGUILayout.Toggle("Detailed Build Report", b.detailedBuildReport);
 #endif
 
-#if ADDRESSABLES
                 b.rebuildAddressables = EditorGUILayout.Toggle("Rebuild Addressables", b.rebuildAddressables);
-#endif
 
 #if UNITY_2018_3_OR_NEWER
                 b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup("Stripping Level", b.strippingLevel);

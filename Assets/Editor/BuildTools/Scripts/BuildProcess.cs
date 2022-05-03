@@ -7,12 +7,10 @@ using System.Diagnostics;
 using UnityEditor.Build.Reporting;
 #endif
 
-#if ADDRESSABLES
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
-#endif
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public static class BuildProcess
     {
@@ -45,7 +43,7 @@ namespace Himeki.Build
                     PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
 #endif
 
-#if UNITY_2017_2_OR_NEWER
+#if UNITY_2017_2_OR_NEWER && !UNITY_2020_2_OR_NEWER
                     if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
                     {
                         PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
@@ -60,6 +58,14 @@ namespace Himeki.Build
                         PlayerSettings.SetVirtualRealitySupported(targetGroup, false);
                     }
 #endif
+                    if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
+                    {
+                        UnityEngine.XR.XRSettings.enabled = setup.supportsVR;
+                    }
+                    else
+                    {
+                        UnityEngine.XR.XRSettings.enabled = false;
+                    }
 
                     if (target == BuildTarget.Android)
                     {
@@ -75,13 +81,11 @@ namespace Himeki.Build
                         EditorUserBuildSettings.ps4BuildSubtarget = setup.ps4BuildSubtarget;
                     }
 
-#if ADDRESSABLES
                     if(setup.rebuildAddressables)
                     {
                         AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
                         AddressableAssetSettings.BuildPlayerContent();
                     }
-#endif
 
                     var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 

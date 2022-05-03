@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
 
     [Serializable]
@@ -31,9 +31,7 @@ namespace Himeki.Build
         public bool detailedBuildReport = false;
 #endif
 
-#if ADDRESSABLES
         public bool rebuildAddressables = false;
-#endif
 
         //iOS
         public bool iosSymlinkLibraries = false;

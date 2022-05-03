@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public static class VRUtils
     {

@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public static class ScenesUtils
     {

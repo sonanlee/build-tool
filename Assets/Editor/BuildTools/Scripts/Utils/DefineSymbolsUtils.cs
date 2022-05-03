@@ -1,6 +1,6 @@
 using System;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public static class DefineSymbolsUtils
     {

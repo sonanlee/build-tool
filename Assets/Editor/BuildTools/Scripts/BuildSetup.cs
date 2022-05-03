@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
 
     [Serializable]
@@ -14,12 +14,11 @@ namespace Himeki.Build
         public bool abortBatchOnFailure = false;
         public List<BuildSetupEntry> entriesList;
 
-        [MenuItem("Builds/Create/BuildSetup")]
         public static BuildSetup Create()
         {
             BuildSetup asset = ScriptableObject.CreateInstance<BuildSetup>();
 
-            AssetDatabase.CreateAsset(asset, BuildUtils.SETUPS_REL_DIRECTORY + "buildSetup.asset");
+            AssetDatabase.CreateAsset(asset, BuildUtils.SETUPS_REL_DIRECTORY + "BuildSetup.asset");
             AssetDatabase.SaveAssets();
             return asset;
         }

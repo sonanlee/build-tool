@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace Himeki.Build
+namespace Soma.Build
 {
     public class PlayerSettingsSnapshot
     {
@@ -49,7 +49,9 @@ namespace Himeki.Build
             EditorUserBuildSettings.buildAppBundle = androidAppBundleEnabled;
 #endif
 
-#if UNITY_2017_2_OR_NEWER
+#if UNITY_2020_2_OR_NEWER
+            UnityEngine.XR.XRSettings.enabled = vrSupported;
+#elif UNITY_2017_2_OR_NEWER
             PlayerSettings.SetVirtualRealitySupported(buildTargetGroup, vrSupported);
             PlayerSettings.SetVirtualRealitySDKs(buildTargetGroup, vrSdks);
 #endif
