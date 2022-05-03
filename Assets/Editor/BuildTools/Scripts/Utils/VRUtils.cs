@@ -1,30 +1,24 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.XR;
 
 namespace Soma.Build
 {
     public static class VRUtils
     {
-
-        public static string[] getAvailableVRSdks(BuildTargetGroup targetGroup)
+        public static string[] GetAvailableVRSdks(BuildTargetGroup targetGroup)
         {
-#if UNITY_2017_2_OR_NEWER && !UNITY_2019_3_OR_NEWER
-            return PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
-#elif UNITY_2019_3_OR_NEWER
-            return UnityEngine.XR.XRSettings.supportedDevices;
-#else
-            return new string[0];
-#endif
+            return XRSettings.supportedDevices;
         }
 
-        public static string[] getSelectedVRSdksFromFlags(BuildTargetGroup targetGroup, int flags)
+        public static string[] GetSelectedVRSdksFromFlags(BuildTargetGroup targetGroup, int flags)
         {
             var result = new List<string>();
 
-            var vrSdks = getAvailableVRSdks(targetGroup);
-            for (int i = 0; i < vrSdks.Length; i++)
+            var vrSdks = GetAvailableVRSdks(targetGroup);
+            for (var i = 0; i < vrSdks.Length; i++)
             {
-                int layer = 1 << i;
+                var layer = 1 << i;
                 if ((flags & layer) != 0)
                 {
                     result.Add(vrSdks[i]);
@@ -34,11 +28,10 @@ namespace Soma.Build
             return result.ToArray();
         }
 
-        public static bool targetGroupSupportsVirtualReality(BuildTargetGroup targetGroup)
+        public static bool TargetGroupSupportsVirtualReality(BuildTargetGroup targetGroup)
         {
-            var vrSdks = getAvailableVRSdks(targetGroup);
+            var vrSdks = GetAvailableVRSdks(targetGroup);
             return vrSdks.Length > 0;
         }
-
     }
 }

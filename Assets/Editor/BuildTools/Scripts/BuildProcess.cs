@@ -1,117 +1,85 @@
-using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
-using System.Diagnostics;
-
-#if UNITY_2018_1_OR_NEWER
-using UnityEditor.Build.Reporting;
-#endif
-
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.Build.Reporting;
+using UnityEditor.OSXStandalone;
+using UnityEngine;
+using UnityEngine.XR;
 
 namespace Soma.Build
 {
     public static class BuildProcess
     {
-
-        private const string BUILD_FILE_RELATIVE_PATH_ARG = "-buildSetupRelPath";
+        private const string BuildFileRelativePathArg = "-buildSetupRelPath";
 
         public static void Build(BuildSetup buildSetup)
         {
-            var defaultScenes = ScenesUtils.getDefaultScenesAsArray();
+            var defaultScenes = ScenesUtils.GetDefaultScenesAsArray();
 
-            string path = buildSetup.rootDirectory;
+            var path = buildSetup.exportDirectory;
 
             var playerSettingsSnapshot = new PlayerSettingsSnapshot();
 
             var setupList = buildSetup.entriesList;
-            for (var i = 0; i < setupList.Count; i++)
+            foreach (var setup in setupList)
             {
-                var setup = setupList[i];
                 if (setup.enabled)
                 {
                     var target = setup.target;
                     var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
 
-                    playerSettingsSnapshot.takeSnapshot(targetGroup);
+                    playerSettingsSnapshot.TakeSnapshot(targetGroup);
 
                     PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
-                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, $"{buildSetup.commonScriptingDefineSymbols},{setup.scriptingDefineSymbols}");
 
-#if UNITY_2018_3_OR_NEWER
                     PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
-#endif
 
-#if UNITY_2017_2_OR_NEWER && !UNITY_2020_2_OR_NEWER
-                    if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
+                    if (VRUtils.TargetGroupSupportsVirtualReality(targetGroup))
                     {
-                        PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
-                        if (setup.supportsVR)
-                        {
-                            var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
-                            PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
-                        }
+                        XRSettings.enabled = setup.supportsVR;
                     }
                     else
                     {
-                        PlayerSettings.SetVirtualRealitySupported(targetGroup, false);
-                    }
-#endif
-                    if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
-                    {
-                        UnityEngine.XR.XRSettings.enabled = setup.supportsVR;
-                    }
-                    else
-                    {
-                        UnityEngine.XR.XRSettings.enabled = false;
+                        XRSettings.enabled = false;
                     }
 
                     if (target == BuildTarget.Android)
                     {
-                        #if UNITY_2017_4_OR_NEWER
                         EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
                         PlayerSettings.Android.targetArchitectures = setup.androidArchitecture;
-                        #endif
                     }
 
-                    if(target == BuildTarget.PS4)
+                    if (target == BuildTarget.StandaloneOSX)
                     {
-                        EditorUserBuildSettings.ps4HardwareTarget = setup.ps4HardwareTarget;
-                        EditorUserBuildSettings.ps4BuildSubtarget = setup.ps4BuildSubtarget;
+                        UserBuildSettings.architecture = setup.macOSArchitecture;
                     }
 
-                    if(setup.rebuildAddressables)
+                    if (setup.rebuildAddressables)
                     {
                         AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
                         AddressableAssetSettings.BuildPlayerContent();
                     }
 
-                    var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
+                    var buildPlayerOptions = BuildUtils.GetBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
-#if UNITY_2018_1_OR_NEWER
-                    BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-                    BuildSummary buildSummary = report.summary;
-                    var success = (buildSummary.result == BuildResult.Succeeded);
-                    UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
-#else
-                    var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
-                    var success = string.IsNullOrEmpty(result);
-                    UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
-#endif
+                    var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                    var buildSummary = report.summary;
+                    var success = buildSummary.result == BuildResult.Succeeded;
+                    Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
 
                     // Revert group build player settings after building
-                    playerSettingsSnapshot.applySnapshot();
+                    playerSettingsSnapshot.ApplySnapshot();
 
                     if (!success && buildSetup.abortBatchOnFailure)
                     {
-                        UnityEngine.Debug.LogError("Failure - Aborting remaining builds from batch");
+                        Debug.LogError("Failure - Aborting remaining builds from batch");
                         break;
                     }
                 }
                 else
                 {
-                    UnityEngine.Debug.Log("Skipping Build " + setup.buildName);
+                    Debug.Log("Skipping Build " + setup.buildName);
                 }
             }
         }
@@ -125,13 +93,13 @@ namespace Soma.Build
             }
             else
             {
-                UnityEngine.Debug.LogError("Cannot find build setup in path: " + buildSetupRelativePath);
+                Debug.LogError("Cannot find build setup in path: " + buildSetupRelativePath);
             }
         }
 
         public static void BuildWithArgs()
         {
-            string buildFilePath = CLIUtils.GetCommandLineArg(BUILD_FILE_RELATIVE_PATH_ARG);
+            var buildFilePath = CLIUtils.GetCommandLineArg(BuildFileRelativePathArg);
 
             if (!string.IsNullOrEmpty(buildFilePath))
             {
@@ -139,9 +107,8 @@ namespace Soma.Build
             }
             else
             {
-                UnityEngine.Debug.LogError("Cannot find build setup path, make sure to specify using " + BUILD_FILE_RELATIVE_PATH_ARG);
+                Debug.LogError("Cannot find build setup path, make sure to specify using " + BuildFileRelativePathArg);
             }
         }
-
     }
 }

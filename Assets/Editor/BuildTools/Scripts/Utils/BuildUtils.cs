@@ -4,13 +4,12 @@ namespace Soma.Build
 {
     public static class BuildUtils
     {
-        public const string SETUPS_REL_DIRECTORY = "Assets/Plugins/build-tool/Editor/BuildTools/";
-        private const string WINDOWS_EXTENSION = ".exe";
-        public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
-        {
-            var buildPlayerOptions = new BuildPlayerOptions();
+        public const string SetupsDirectory = "Assets/Plugins/build-tool/Editor/BuildTools/";
+        private const string WindowsExtension = ".exe";
 
-            buildPlayerOptions.target = setupEntry.target;
+        public static BuildPlayerOptions GetBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
+        {
+            var buildPlayerOptions = new BuildPlayerOptions {target = setupEntry.target};
 
             if (setupEntry.useDefaultBuildScenes)
             {
@@ -22,27 +21,28 @@ namespace Soma.Build
             }
 
             var pathName = rootDirPath + "/" + setupEntry.buildName;
-            if(setupEntry.target == BuildTarget.StandaloneWindows || setupEntry.target == BuildTarget.StandaloneWindows64)
+            if (setupEntry.target == BuildTarget.StandaloneWindows || setupEntry.target == BuildTarget.StandaloneWindows64)
             {
-                if(!pathName.Contains(WINDOWS_EXTENSION))
+                if (!pathName.Contains(WindowsExtension))
                 {
-                    pathName += WINDOWS_EXTENSION;
+                    pathName += WindowsExtension;
                 }
             }
+
             buildPlayerOptions.locationPathName = pathName;
-            
+
 
             if (!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
             {
                 buildPlayerOptions.assetBundleManifestPath = setupEntry.assetBundleManifestPath;
             }
 
-            BuildOptions buildOptions = BuildOptions.None;
+            var buildOptions = BuildOptions.None;
             if (setupEntry.debugBuild)
             {
                 buildOptions |= BuildOptions.Development;
             }
-            
+
             if (setupEntry.strictMode)
             {
                 buildOptions |= BuildOptions.StrictMode;
@@ -52,21 +52,14 @@ namespace Soma.Build
             {
                 if (setupEntry.iosSymlinkLibraries)
                 {
-//Todo: Need to find specific version when this was changed
-#if UNITY_2021_1_OR_NEWER
                     buildOptions |= BuildOptions.SymlinkSources;
-#else
-                    buildOptions |= BuildOptions.SymlinkLibraries;
-#endif
                 }
             }
 
-#if UNITY_2020_1_OR_NEWER
-            if(setupEntry.detailedBuildReport)
+            if (setupEntry.detailedBuildReport)
             {
                 buildOptions |= BuildOptions.DetailedBuildReport;
             }
-#endif
 
             buildPlayerOptions.options = buildOptions;
 

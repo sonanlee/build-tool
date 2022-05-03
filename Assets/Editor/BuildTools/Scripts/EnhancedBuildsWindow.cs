@@ -1,54 +1,38 @@
-using UnityEngine;
-using UnityEditor;
 using System.Collections.Generic;
-using System.Diagnostics;
-#if UNITY_2018_1_OR_NEWER
-using UnityEditor.Build.Reporting;
+using UnityEditor;
+
+#if UNITY_EDITOR_OSX
+using UnityEditor.OSXStandalone;
 #endif
+
+using UnityEngine;
 
 namespace Soma.Build
 {
     public class EnhancedBuildsWindow : EditorWindow
     {
-        private const string EDITOR_PREFS_KEY = "ObjectPath";
-        private const string WINDOW_TITLE = "Enhanced Builds";
+        private const string EditorPrefsKey = "ObjectPath";
+        private const string WindowTitle = "Enhanced Builds";
         public BuildSetup buildSetup;
-        private Vector2 buildEntriesListScrollPos;
+        private Vector2 _buildEntriesListScrollPos;
 
-        [MenuItem("Builds/Open Enhanced Builds %#e")]
-        static void Init()
+        private void OnEnable()
         {
-            EnhancedBuildsWindow window = (EnhancedBuildsWindow)EditorWindow.GetWindow(typeof(EnhancedBuildsWindow), false, WINDOW_TITLE, true);
+            Undo.undoRedoPerformed += OnUndoRedo;
 
-            window.Show();
-        }
-
-        void OnEnable()
-        {
-            Undo.undoRedoPerformed += onUndoRedo;
-
-            if (EditorPrefs.HasKey(EDITOR_PREFS_KEY))
+            if (EditorPrefs.HasKey(EditorPrefsKey))
             {
-                string objectPath = EditorPrefs.GetString(EDITOR_PREFS_KEY);
+                var objectPath = EditorPrefs.GetString(EditorPrefsKey);
                 buildSetup = AssetDatabase.LoadAssetAtPath(objectPath, typeof(BuildSetup)) as BuildSetup;
             }
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
-            Undo.undoRedoPerformed -= onUndoRedo;
+            Undo.undoRedoPerformed -= OnUndoRedo;
         }
 
-        private void onUndoRedo()
-        {
-            if (buildSetup)
-            {
-                EditorUtility.SetDirty(buildSetup);
-                Repaint();
-            }
-        }
-
-        void OnGUI()
+        private void OnGUI()
         {
             EditorGUIUtility.labelWidth = 0f;
 
@@ -56,7 +40,7 @@ namespace Soma.Build
             GUILayout.Space(10);
             if (buildSetup != null)
             {
-                string objectPath = EditorPrefs.GetString(EDITOR_PREFS_KEY);
+                var objectPath = EditorPrefs.GetString(EditorPrefsKey);
                 EditorGUILayout.LabelField("Current Build Setup File", objectPath);
             }
 
@@ -73,12 +57,12 @@ namespace Soma.Build
 
             if (GUILayout.Button("Select Build File"))
             {
-                selectBuildFile();
+                SelectBuildFile();
             }
 
             if (GUILayout.Button("Create New Build File"))
             {
-                createNewBuildSetup();
+                CreateNewBuildSetup();
             }
 
             GUILayout.EndHorizontal();
@@ -94,18 +78,20 @@ namespace Soma.Build
                 GUILayout.Space(10);
 
                 EditorGUIUtility.labelWidth = 200f;
-                if (GUILayout.Button("Choose Root Directory", GUILayout.ExpandWidth(false)))
+                if (GUILayout.Button("Choose Export Directory", GUILayout.ExpandWidth(false)))
                 {
-                    Undo.RecordObject(buildSetup, "Set Build Setup Root Directory");
-                    buildSetup.rootDirectory = EditorUtility.SaveFolderPanel("Choose Location", "", "");
+                    Undo.RecordObject(buildSetup, "Set Build Setup Export Directory");
+                    buildSetup.exportDirectory = EditorUtility.SaveFolderPanel("Choose Location", "", "");
                 }
-                EditorGUILayout.LabelField("Root Directory", buildSetup.rootDirectory);
 
-                GUILayout.Space(10); 
+                EditorGUILayout.LabelField("Export Directory", buildSetup.exportDirectory);
+
+                GUILayout.Space(10);
 
                 buildSetup.abortBatchOnFailure = EditorGUILayout.Toggle("Abort batch on failure", buildSetup.abortBatchOnFailure);
-
-                int buildsAmount = buildSetup.entriesList.Count;
+                buildSetup.commonScriptingDefineSymbols = EditorGUILayout.TextField("Common Scripting Define Symbols", buildSetup.commonScriptingDefineSymbols);
+                
+                var buildsAmount = buildSetup.entriesList.Count;
 
                 GUILayout.Space(10);
                 GUILayout.Label("Builds (" + buildsAmount + ")", EditorStyles.label);
@@ -113,7 +99,7 @@ namespace Soma.Build
 
                 if (buildsAmount > 0)
                 {
-                    buildEntriesListScrollPos = EditorGUILayout.BeginScrollView(buildEntriesListScrollPos, false, false, GUILayout.Width(position.width), GUILayout.MaxHeight(500));
+                    _buildEntriesListScrollPos = EditorGUILayout.BeginScrollView(_buildEntriesListScrollPos, false, false, GUILayout.Width(position.width), GUILayout.MaxHeight(500));
 
                     var list = buildSetup.entriesList;
                     for (var i = 0; i < list.Count; i++)
@@ -122,14 +108,14 @@ namespace Soma.Build
                         EditorGUILayout.BeginHorizontal();
 
                         b.enabled = EditorGUILayout.Toggle("", b.enabled, GUILayout.MaxWidth(15.0f));
-                        b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
+                        b._guiShowOptions = EditorGUILayout.Foldout(b._guiShowOptions, b.buildName, EditorStyles.foldout);
 
                         using (new EditorGUI.DisabledScope(i == 0))
                         {
                             if (GUILayout.Button(new GUIContent("↑", "Rearranges Build Entry up"), GUILayout.ExpandWidth(false)))
                             {
                                 Undo.RecordObject(buildSetup, "Rearranged Build Entry up");
-                                buildSetup.rearrangeBuildSetupEntry(b, true);
+                                buildSetup.RearrangeBuildSetupEntry(b, true);
                             }
                         }
 
@@ -138,19 +124,19 @@ namespace Soma.Build
                             if (GUILayout.Button(new GUIContent("↓", "Rearranges Build Entry down"), GUILayout.ExpandWidth(false)))
                             {
                                 Undo.RecordObject(buildSetup, "Rearranged Build Entry down");
-                                buildSetup.rearrangeBuildSetupEntry(b, false);
+                                buildSetup.RearrangeBuildSetupEntry(b, false);
                             }
                         }
 
                         GUI.backgroundColor = Color.red;
                         if (GUILayout.Button(new GUIContent("x", "Deletes Build Entry"), GUILayout.ExpandWidth(false)))
                         {
-                            if(EditorUtility.DisplayDialog("Delete Build Entry?",
-                                "Are you sure you want to delete build entry " + b.buildName
-                                , "Yes", "No"))
+                            if (EditorUtility.DisplayDialog("Delete Build Entry?",
+                                    "Are you sure you want to delete build entry " + b.buildName
+                                    , "Yes", "No"))
                             {
                                 Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
-                                buildSetup.deleteBuildSetupEntry(b);
+                                buildSetup.DeleteBuildSetupEntry(b);
                             }
                         }
 
@@ -158,15 +144,16 @@ namespace Soma.Build
                         if (GUILayout.Button(new GUIContent("c", "Duplicates Build Entry"), GUILayout.ExpandWidth(false)))
                         {
                             Undo.RecordObject(buildSetup, "Duplicate Build Setup Entry");
-                            buildSetup.duplicateBuildSetupEntry(b);
+                            buildSetup.DuplicateBuildSetupEntry(b);
                         }
+
                         GUI.backgroundColor = Color.white;
 
                         EditorGUILayout.EndHorizontal();
-                        if (b.guiShowOptions)
+                        if (b._guiShowOptions)
                         {
                             EditorGUI.indentLevel++;
-                            drawBuildEntryGUI(b);
+                            DrawBuildEntryGUI(b);
                             EditorGUI.indentLevel--;
                         }
 
@@ -174,7 +161,6 @@ namespace Soma.Build
                     }
 
                     EditorGUILayout.EndScrollView();
-
                 }
                 else
                 {
@@ -186,7 +172,7 @@ namespace Soma.Build
                 if (GUILayout.Button(new GUIContent("Add Entry", "Adds a new build entry to the list"), GUILayout.ExpandWidth(true)))
                 {
                     Undo.RecordObject(buildSetup, "Add Build Setup Entry");
-                    buildSetup.addBuildSetupEntry();
+                    buildSetup.AddBuildSetupEntry();
                 }
 
                 GUILayout.Space(10);
@@ -195,12 +181,12 @@ namespace Soma.Build
 
                 GUILayout.Space(10);
 
-                var isReady = buildSetup.isReady();
+                var isReady = buildSetup.IsReady();
                 using (new EditorGUI.DisabledScope(!isReady))
                 {
                     if (GUILayout.Button("Build", GUILayout.ExpandWidth(true)))
                     {
-                        buildGame();
+                        BuildGame();
                     }
                 }
 
@@ -213,102 +199,114 @@ namespace Soma.Build
             {
                 GUILayout.Label("Select or Create a new Build Setup", EditorStyles.boldLabel);
             }
+
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(buildSetup);
             }
         }
 
-        private void drawBuildEntryGUI(BuildSetupEntry b)
+        [MenuItem("Builds/Open Enhanced Builds %#e")]
+        private static void Init()
+        {
+            var window = (EnhancedBuildsWindow)GetWindow(typeof(EnhancedBuildsWindow), false, WindowTitle, true);
+
+            window.Show();
+        }
+
+        private void OnUndoRedo()
+        {
+            if (buildSetup)
+            {
+                EditorUtility.SetDirty(buildSetup);
+                Repaint();
+            }
+        }
+
+        private void DrawBuildEntryGUI(BuildSetupEntry b)
         {
             b.buildName = EditorGUILayout.TextField("Build Name", b.buildName);
             b.target = (BuildTarget)EditorGUILayout.EnumPopup("Target", b.target);
-            if(b.target > 0)
+            if (b.target > 0)
             {
                 b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
                 b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
 
-                drawScenesSectionGUI(b);
-                drawAdvancedOptionsSectionGUI(b);
-                drawVRSectionGUI(b);
+                DrawScenesSectionGUI(b);
+                DrawAdvancedOptionsSectionGUI(b);
+                DrawVRSectionGUI(b);
             }
         }
 
-        private void drawScenesSectionGUI(BuildSetupEntry b)
+        private void DrawScenesSectionGUI(BuildSetupEntry b)
         {
             b.useDefaultBuildScenes = EditorGUILayout.Toggle("Use Default Build Scenes", b.useDefaultBuildScenes);
 
             if (!b.useDefaultBuildScenes)
             {
-                b.guiShowCustomScenes = EditorGUILayout.Foldout(b.guiShowCustomScenes, "Custom Scenes");
-                if (b.guiShowCustomScenes)
+                b._guiShowCustomScenes = EditorGUILayout.Foldout(b._guiShowCustomScenes, "Custom Scenes");
+                if (b._guiShowCustomScenes)
                 {
                     EditorGUI.indentLevel++;
                     if (b.customScenes.Count > 0)
                     {
                         var scenes = b.customScenes;
 
-                        for (int i = 0; i < scenes.Count; i++)
+                        for (var i = 0; i < scenes.Count; i++)
                         {
                             GUILayout.BeginHorizontal();
                             scenes[i] = EditorGUILayout.TextField("Scene " + i, scenes[i]);
                             if (GUILayout.Button("Select Scene", GUILayout.ExpandWidth(false)))
                             {
-                                string absPath = EditorUtility.OpenFilePanel("Select Scene file", "", "unity");
+                                var absPath = EditorUtility.OpenFilePanel("Select Scene file", "", "unity");
                                 if (absPath.StartsWith(Application.dataPath))
                                 {
-                                    string relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
+                                    var relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
                                     scenes[i] = relPath;
                                 }
                             }
+
                             if (GUILayout.Button("Remove Scene", GUILayout.ExpandWidth(false)))
                             {
                                 Undo.RecordObject(buildSetup, "Remove Build Setup Entry Custom scene");
                                 b.customScenes.RemoveAt(i);
                                 i--;
                             }
+
                             GUILayout.EndHorizontal();
                         }
-
                     }
 
-                    using(var horizontalScope = new GUILayout.HorizontalScope())
+                    using (var horizontalScope = new GUILayout.HorizontalScope())
                     {
                         GUILayout.Space(20f);
-                    
+
                         if (GUILayout.Button("Add Scene", GUILayout.ExpandWidth(false)))
                         {
                             Undo.RecordObject(buildSetup, "Add Build Setup Entry Custom scene");
                             b.customScenes.Add(string.Empty);
                         }
                     }
-                    
+
 
                     EditorGUI.indentLevel--;
                 }
             }
         }
 
-        private void drawAdvancedOptionsSectionGUI(BuildSetupEntry b)
+        private void DrawAdvancedOptionsSectionGUI(BuildSetupEntry b)
         {
-            b.guiShowAdvancedOptions = EditorGUILayout.Foldout(b.guiShowAdvancedOptions, "Advanced Options");
-            if (b.guiShowAdvancedOptions)
+            b._guiShowAdvancedOptions = EditorGUILayout.Foldout(b._guiShowAdvancedOptions, "Advanced Options");
+            if (b._guiShowAdvancedOptions)
             {
                 EditorGUI.indentLevel++;
 
-#if UNITY_2020_1_OR_NEWER
                 b.detailedBuildReport = EditorGUILayout.Toggle("Detailed Build Report", b.detailedBuildReport);
-#endif
-
                 b.rebuildAddressables = EditorGUILayout.Toggle("Rebuild Addressables", b.rebuildAddressables);
-
-#if UNITY_2018_3_OR_NEWER
                 b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup("Stripping Level", b.strippingLevel);
-#endif
-
                 b.strictMode = EditorGUILayout.Toggle(new GUIContent("Strict Mode",
-                                                    "Do not allow the build to succeed if any errors are reported."),
-                                                    b.strictMode);
+                        "Do not allow the build to succeed if any errors are reported."),
+                    b.strictMode);
                 b.assetBundleManifestPath = EditorGUILayout.TextField("AssetBundle Manifest Path", b.assetBundleManifestPath);
                 b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup("Scripting Backend", b.scriptingBackend);
 
@@ -319,37 +317,36 @@ namespace Soma.Build
 
                 if (b.target == BuildTarget.Android)
                 {
-                    #if UNITY_2017_4_OR_NEWER
                     b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
                     b.androidArchitecture = (AndroidArchitecture)EditorGUILayout.EnumPopup("Android Architecture", b.androidArchitecture);
-                    #endif
                 }
-
-                if(b.target == BuildTarget.PS4)
+                
+                
+#if UNITY_EDITOR_OSX
+                if (b.target == BuildTarget.StandaloneOSX)
                 {
-                    b.ps4BuildSubtarget = (PS4BuildSubtarget)EditorGUILayout.EnumPopup("PS4 Build Subtarget", b.ps4BuildSubtarget);
-                    b.ps4HardwareTarget = (PS4HardwareTarget)EditorGUILayout.EnumPopup("PS4 Hardware Target", b.ps4HardwareTarget);
+                    b.macOSArchitecture = (MacOSArchitecture)EditorGUILayout.EnumPopup("MacOS Architecture", b.macOSArchitecture);
                 }
+#endif
 
                 EditorGUI.indentLevel--;
             }
         }
 
-        private void drawVRSectionGUI(BuildSetupEntry b)
+        private void DrawVRSectionGUI(BuildSetupEntry b)
         {
-            #if UNITY_2017_2_OR_NEWER
             var targetGroup = BuildPipeline.GetBuildTargetGroup(b.target);
-            if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
+            if (VRUtils.TargetGroupSupportsVirtualReality(targetGroup))
             {
                 b.supportsVR = EditorGUILayout.Toggle("VR Support", b.supportsVR);
                 if (b.supportsVR)
                 {
-                    b.guiShowVROptions = EditorGUILayout.Foldout(b.guiShowVROptions, "VR Options");
-                    if (b.guiShowVROptions)
+                    b._guiShowVROptions = EditorGUILayout.Foldout(b._guiShowVROptions, "VR Options");
+                    if (b._guiShowVROptions)
                     {
                         EditorGUI.indentLevel++;
 
-                        var vrSdks = VRUtils.getAvailableVRSdks(targetGroup);
+                        var vrSdks = VRUtils.GetAvailableVRSdks(targetGroup);
                         if (vrSdks.Length > 0)
                         {
                             b.vrSdkFlags = EditorGUILayout.MaskField("VR SDKs", b.vrSdkFlags, vrSdks);
@@ -363,40 +360,38 @@ namespace Soma.Build
                     }
                 }
             }
-            #endif
         }
 
-        private void buildGame()
+        private void BuildGame()
         {
             BuildProcess.Build(buildSetup);
         }
 
-        private void createNewBuildSetup()
+        private void CreateNewBuildSetup()
         {
             buildSetup = BuildSetup.Create();
             if (buildSetup)
             {
                 buildSetup.entriesList = new List<BuildSetupEntry>();
-                string relPath = AssetDatabase.GetAssetPath(buildSetup);
-                EditorPrefs.SetString(EDITOR_PREFS_KEY, relPath);
+                var relPath = AssetDatabase.GetAssetPath(buildSetup);
+                EditorPrefs.SetString(EditorPrefsKey, relPath);
             }
         }
-        private void selectBuildFile()
+
+        private void SelectBuildFile()
         {
-            string absPath = EditorUtility.OpenFilePanel("Select Build Setup file", BuildUtils.SETUPS_REL_DIRECTORY, "asset");
+            var absPath = EditorUtility.OpenFilePanel("Select Build Setup file", BuildUtils.SetupsDirectory, "asset");
             if (absPath.StartsWith(Application.dataPath))
             {
-                string relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
+                var relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
                 var loadedBuildAsset = AssetDatabase.LoadAssetAtPath(relPath, typeof(BuildSetup)) as BuildSetup;
 
                 if (loadedBuildAsset)
                 {
                     buildSetup = loadedBuildAsset;
-                    EditorPrefs.SetString(EDITOR_PREFS_KEY, relPath);
+                    EditorPrefs.SetString(EditorPrefsKey, relPath);
                 }
             }
         }
-
-
     }
 }

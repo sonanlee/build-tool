@@ -1,62 +1,41 @@
 using UnityEditor;
+using UnityEngine.XR;
 
 namespace Soma.Build
 {
     public class PlayerSettingsSnapshot
     {
+        public bool _androidAppBundleEnabled;
 
-        private BuildTargetGroup buildTargetGroup;
-        private ScriptingImplementation scriptingBackend;
-        private string scriptingDefineSymbols;
-#if UNITY_2018_3_OR_NEWER
-        private ManagedStrippingLevel strippingLevel;
-#endif
-        public bool androidAppBundleEnabled;
-        private bool vrSupported;
-        private string[] vrSdks;
+        private BuildTargetGroup _buildTargetGroup;
+        private ScriptingImplementation _scriptingBackend;
+        private string _scriptingDefineSymbols;
+        private ManagedStrippingLevel _strippingLevel;
+        
+        private string[] _vrSdks;
+        private bool _vrSupported;
 
-        public void takeSnapshot(BuildTargetGroup targetGroup)
+        public void TakeSnapshot(BuildTargetGroup targetGroup)
         {
-            buildTargetGroup = targetGroup;
+            _buildTargetGroup = targetGroup;
 
-            scriptingBackend = PlayerSettings.GetScriptingBackend(targetGroup);
-            scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
+            _scriptingBackend = PlayerSettings.GetScriptingBackend(targetGroup);
+            _scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
 
-#if UNITY_2018_3_OR_NEWER
-            strippingLevel = PlayerSettings.GetManagedStrippingLevel(targetGroup);
-#endif
+            _strippingLevel = PlayerSettings.GetManagedStrippingLevel(targetGroup);
 
-#if UNITY_2017_2_OR_NEWER
-            vrSupported = PlayerSettings.GetVirtualRealitySupported(targetGroup);
-#endif
-            vrSdks = VRUtils.getAvailableVRSdks(targetGroup);
-
-#if UNITY_2017_4_OR_NEWER
-            androidAppBundleEnabled = EditorUserBuildSettings.buildAppBundle;
-#endif
+            _vrSupported = XRSettings.enabled;
+            _vrSdks = VRUtils.GetAvailableVRSdks(targetGroup);
+            _androidAppBundleEnabled = EditorUserBuildSettings.buildAppBundle;
         }
 
-        public void applySnapshot()
+        public void ApplySnapshot()
         {
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, scriptingDefineSymbols);
-            PlayerSettings.SetScriptingBackend(buildTargetGroup, scriptingBackend);
-
-#if UNITY_2018_3_OR_NEWER
-            PlayerSettings.SetManagedStrippingLevel(buildTargetGroup, strippingLevel);
-#endif
-
-#if UNITY_2017_4_OR_NEWER
-            EditorUserBuildSettings.buildAppBundle = androidAppBundleEnabled;
-#endif
-
-#if UNITY_2020_2_OR_NEWER
-            UnityEngine.XR.XRSettings.enabled = vrSupported;
-#elif UNITY_2017_2_OR_NEWER
-            PlayerSettings.SetVirtualRealitySupported(buildTargetGroup, vrSupported);
-            PlayerSettings.SetVirtualRealitySDKs(buildTargetGroup, vrSdks);
-#endif
-
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(_buildTargetGroup, _scriptingDefineSymbols);
+            PlayerSettings.SetScriptingBackend(_buildTargetGroup, _scriptingBackend);
+            PlayerSettings.SetManagedStrippingLevel(_buildTargetGroup, _strippingLevel);
+            EditorUserBuildSettings.buildAppBundle = _androidAppBundleEnabled;
+            XRSettings.enabled = _vrSupported;
         }
-
     }
 }

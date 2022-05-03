@@ -4,22 +4,21 @@ namespace Soma.Build
 {
     public static class DefineSymbolsUtils
     {
-        private static readonly char[] SPLIT_DIVIDER = new char[] { ';' };
-        private const string JOIN_SEPARATOR = ";";
+        private const string JoinSeparator = ";";
+        private static readonly char[] s_splitDivider = {';'};
 
-        public static string[] splitDefineSymbolString(string defineSymbols)
+        public static string[] SplitDefineSymbolString(string defineSymbols)
         {
-            string[] split = defineSymbols.Split(SPLIT_DIVIDER, StringSplitOptions.RemoveEmptyEntries);
+            var split = defineSymbols.Split(s_splitDivider, StringSplitOptions.RemoveEmptyEntries);
 
             return split;
         }
 
-        public static string mergeDefineSymbols(string[] defineSymbols)
+        public static string MergeDefineSymbols(string[] defineSymbols)
         {
-            string merge = string.Join(JOIN_SEPARATOR, defineSymbols);
+            var merge = string.Join(JoinSeparator, defineSymbols);
 
             return merge;
         }
-
     }
 }

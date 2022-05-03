@@ -1,10 +1,12 @@
+using System;
+
 public class CLIUtils
 {
     public static string GetCommandLineArg(string arg)
     {
-        var args = System.Environment.GetCommandLineArgs();
+        var args = Environment.GetCommandLineArgs();
 
-        for (int i = 0; i < args.Length; i++)
+        for (var i = 0; i < args.Length; i++)
         {
             if (args[i] == arg)
             {

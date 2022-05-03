@@ -1,31 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
 namespace Soma.Build
 {
-
     [Serializable]
     public class BuildSetup : ScriptableObject
     {
-        public string rootDirectory = "";
-        public bool abortBatchOnFailure = false;
+        public string exportDirectory = "";
+        public bool abortBatchOnFailure;
+        public string commonScriptingDefineSymbols = "";
         public List<BuildSetupEntry> entriesList;
 
         public static BuildSetup Create()
         {
-            BuildSetup asset = ScriptableObject.CreateInstance<BuildSetup>();
+            var asset = CreateInstance<BuildSetup>();
 
-            AssetDatabase.CreateAsset(asset, BuildUtils.SETUPS_REL_DIRECTORY + "BuildSetup.asset");
+            AssetDatabase.CreateAsset(asset, BuildUtils.SetupsDirectory + "BuildSetup.asset");
             AssetDatabase.SaveAssets();
             return asset;
         }
 
-        public void addBuildSetupEntry()
+        public void AddBuildSetupEntry()
         {
-            BuildSetupEntry buildEntry = new BuildSetupEntry();
+            var buildEntry = new BuildSetupEntry();
 
             var currentBuildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
 
@@ -37,25 +37,25 @@ namespace Soma.Build
             entriesList.Add(buildEntry);
         }
 
-        public void deleteBuildSetupEntry(BuildSetupEntry entry)
+        public void DeleteBuildSetupEntry(BuildSetupEntry entry)
         {
             entriesList.Remove(entry);
         }
 
-        public void duplicateBuildSetupEntry(BuildSetupEntry entry)
+        public void DuplicateBuildSetupEntry(BuildSetupEntry entry)
         {
             var index = entriesList.IndexOf(entry);
-            BuildSetupEntry buildEntry = BuildSetupEntry.Clone(entry);
+            var buildEntry = BuildSetupEntry.Clone(entry);
             buildEntry.buildName = buildEntry.buildName + "_clone";
             entriesList.Insert(index + 1, buildEntry);
         }
 
-        public void rearrangeBuildSetupEntry(BuildSetupEntry entry, bool up)
+        public void RearrangeBuildSetupEntry(BuildSetupEntry entry, bool up)
         {
             var oldIndex = entriesList.IndexOf(entry);
             var newIndex = up ? oldIndex - 1 : oldIndex + 1;
-            
-            if(newIndex >= 0 && newIndex < entriesList.Count)
+
+            if (newIndex >= 0 && newIndex < entriesList.Count)
             {
                 var otherEntry = entriesList[newIndex];
                 entriesList[newIndex] = entry;
@@ -63,13 +63,12 @@ namespace Soma.Build
             }
         }
 
-        public bool isReady()
+        public bool IsReady()
         {
-            var hasPath = !string.IsNullOrEmpty(rootDirectory);
+            var hasPath = !string.IsNullOrEmpty(exportDirectory);
             var hasEntries = entriesList.Any(e => e.enabled);
 
             return hasPath && hasEntries;
         }
     }
-
 }
