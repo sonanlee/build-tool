@@ -1,5 +1,7 @@
+using System;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.Build.Reporting;
 using UnityEditor.OSXStandalone;
@@ -10,9 +12,10 @@ namespace Soma.Build
 {
     public static class BuildProcess
     {
-        private const string BuildFileRelativePathArg = "-buildSetupRelPath";
-
-        public static void Build(BuildSetup buildSetup)
+        private const string BuildFilePathArg = "-buildSetupPath";
+        private const string BuildNumberArg = "-buildNumber";
+        
+        public static void Build(BuildSetup buildSetup, int buildNumber = 0)
         {
             var defaultScenes = ScenesUtils.GetDefaultScenesAsArray();
 
@@ -26,15 +29,15 @@ namespace Soma.Build
                 if (setup.enabled)
                 {
                     var target = setup.target;
-                    var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
+                    var targetGroup = BuildPipeline.GetBuildTargetGroup((BuildTarget)target);
 
                     playerSettingsSnapshot.TakeSnapshot(targetGroup);
 
                     PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
                     PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, $"{buildSetup.commonScriptingDefineSymbols},{setup.scriptingDefineSymbols}");
-
                     PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
 
+                    // VR
                     if (VRUtils.TargetGroupSupportsVirtualReality(targetGroup))
                     {
                         XRSettings.enabled = setup.supportsVR;
@@ -44,25 +47,50 @@ namespace Soma.Build
                         XRSettings.enabled = false;
                     }
 
-                    if (target == BuildTarget.Android)
+                    // Android
+                    if (target == SomaBuildTarget.Android)
                     {
                         EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
                         PlayerSettings.Android.targetArchitectures = setup.androidArchitecture;
                     }
 
-                    if (target == BuildTarget.StandaloneOSX)
+#if UNITY_EDITOR_OSX
+                    if (target == SomaBuildTarget.MacOS)
                     {
-                        UserBuildSettings.architecture = setup.macOSArchitecture;
+                        UserBuildSettings.architecture = (MacOSArchitecture)setup.macOSArchitecture;
+                    }
+#endif
+
+                    if (setup.buildAddressables)
+                    {
+                        AddressableAssetSettingsDefaultObject.Settings.activeProfileId = AddressableAssetSettingsDefaultObject.Settings.profileSettings.GetProfileId(setup.profileNameAddressable);
+                        if (setup.contentOnlyBuild)
+                        {
+                            if (!string.IsNullOrEmpty(setup.contentStateBinPathAddressable))
+                            {
+                                ContentUpdateScript.BuildContentUpdate(AddressableAssetSettingsDefaultObject.Settings, setup.contentStateBinPathAddressable);
+                            }
+                            else
+                            {
+                                Debug.LogError("Addressable Content-State-Bin File is Empty");
+                            }
+                        }
+                        else
+                        {
+                            AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
+                            AddressableAssetSettings.BuildPlayerContent();
+                        }
                     }
 
-                    if (setup.rebuildAddressables)
-                    {
-                        AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
-                        AddressableAssetSettings.BuildPlayerContent();
-                    }
-
+                    // Common Process
+                    PlayerSettings.SplashScreen.show = false;
+                    PlayerSettings.SplashScreen.showUnityLogo = false;
+                    PlayerSettings.Android.bundleVersionCode = buildNumber;
+                    PlayerSettings.iOS.buildNumber = buildNumber.ToString();
+                    PlayerSettings.bundleVersion = $"{PlayerSettings.bundleVersion}.{buildNumber}";
+                    
                     var buildPlayerOptions = BuildUtils.GetBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
-
+                    
                     var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
                     var buildSummary = report.summary;
                     var success = buildSummary.result == BuildResult.Succeeded;
@@ -84,12 +112,12 @@ namespace Soma.Build
             }
         }
 
-        public static void Build(string buildSetupRelativePath)
+        public static void Build(string buildSetupRelativePath, int buildNumber = 0)
         {
             var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupRelativePath, typeof(BuildSetup)) as BuildSetup;
             if (buildSetup != null)
             {
-                Build(buildSetup);
+                Build(buildSetup, buildNumber);
             }
             else
             {
@@ -99,15 +127,20 @@ namespace Soma.Build
 
         public static void BuildWithArgs()
         {
-            var buildFilePath = CLIUtils.GetCommandLineArg(BuildFileRelativePathArg);
-
+            var buildFilePath = CLIUtils.GetCommandLineArg(BuildFilePathArg);
+            var buildNumberStr = CLIUtils.GetCommandLineArg(BuildNumberArg);
+            var buildNumber = 0;
+            if (!string.IsNullOrEmpty(buildNumberStr))
+            {
+                buildNumber = int.Parse(buildNumberStr);
+            }
             if (!string.IsNullOrEmpty(buildFilePath))
             {
-                Build(buildFilePath);
+                Build(buildFilePath, buildNumber);
             }
             else
             {
-                Debug.LogError("Cannot find build setup path, make sure to specify using " + BuildFileRelativePathArg);
+                Debug.LogError("Cannot find build setup path, make sure to specify using " + BuildFilePathArg);
             }
         }
     }

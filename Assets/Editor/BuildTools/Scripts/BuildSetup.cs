@@ -30,7 +30,7 @@ namespace Soma.Build
             var currentBuildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
 
             buildEntry.buildName = Application.productName;
-            buildEntry.target = EditorUserBuildSettings.activeBuildTarget;
+            buildEntry.target = (SomaBuildTarget)EditorUserBuildSettings.activeBuildTarget;
             buildEntry.customScenes = new List<string>();
             buildEntry.scriptingBackend = PlayerSettings.GetScriptingBackend(currentBuildTargetGroup);
 

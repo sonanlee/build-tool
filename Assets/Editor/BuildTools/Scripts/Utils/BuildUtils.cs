@@ -9,7 +9,7 @@ namespace Soma.Build
 
         public static BuildPlayerOptions GetBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
         {
-            var buildPlayerOptions = new BuildPlayerOptions {target = setupEntry.target};
+            var buildPlayerOptions = new BuildPlayerOptions {target = (BuildTarget)setupEntry.target};
 
             if (setupEntry.useDefaultBuildScenes)
             {
@@ -21,7 +21,7 @@ namespace Soma.Build
             }
 
             var pathName = rootDirPath + "/" + setupEntry.buildName;
-            if (setupEntry.target == BuildTarget.StandaloneWindows || setupEntry.target == BuildTarget.StandaloneWindows64)
+            if (setupEntry.target == SomaBuildTarget.Windows)
             {
                 if (!pathName.Contains(WindowsExtension))
                 {
@@ -30,12 +30,7 @@ namespace Soma.Build
             }
 
             buildPlayerOptions.locationPathName = pathName;
-
-
-            if (!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
-            {
-                buildPlayerOptions.assetBundleManifestPath = setupEntry.assetBundleManifestPath;
-            }
+            
 
             var buildOptions = BuildOptions.None;
             if (setupEntry.debugBuild)
@@ -48,7 +43,7 @@ namespace Soma.Build
                 buildOptions |= BuildOptions.StrictMode;
             }
 
-            if (setupEntry.target == BuildTarget.iOS)
+            if (setupEntry.target == SomaBuildTarget.iOS)
             {
                 if (setupEntry.iosSymlinkLibraries)
                 {

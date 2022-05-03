@@ -226,7 +226,7 @@ namespace Soma.Build
         private void DrawBuildEntryGUI(BuildSetupEntry b)
         {
             b.buildName = EditorGUILayout.TextField("Build Name", b.buildName);
-            b.target = (BuildTarget)EditorGUILayout.EnumPopup("Target", b.target);
+            b.target = (SomaBuildTarget)EditorGUILayout.EnumPopup("Target", b.target);
             if (b.target > 0)
             {
                 b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
@@ -234,6 +234,7 @@ namespace Soma.Build
 
                 DrawScenesSectionGUI(b);
                 DrawAdvancedOptionsSectionGUI(b);
+                DrawAddressableSectionGUI(b);
                 DrawVRSectionGUI(b);
             }
         }
@@ -302,20 +303,18 @@ namespace Soma.Build
                 EditorGUI.indentLevel++;
 
                 b.detailedBuildReport = EditorGUILayout.Toggle("Detailed Build Report", b.detailedBuildReport);
-                b.rebuildAddressables = EditorGUILayout.Toggle("Rebuild Addressables", b.rebuildAddressables);
                 b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup("Stripping Level", b.strippingLevel);
                 b.strictMode = EditorGUILayout.Toggle(new GUIContent("Strict Mode",
                         "Do not allow the build to succeed if any errors are reported."),
                     b.strictMode);
-                b.assetBundleManifestPath = EditorGUILayout.TextField("AssetBundle Manifest Path", b.assetBundleManifestPath);
                 b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup("Scripting Backend", b.scriptingBackend);
 
-                if (b.target == BuildTarget.iOS)
+                if (b.target == SomaBuildTarget.iOS)
                 {
                     b.iosSymlinkLibraries = EditorGUILayout.Toggle("XCode - Symlink Library", b.iosSymlinkLibraries);
                 }
 
-                if (b.target == BuildTarget.Android)
+                if (b.target == SomaBuildTarget.Android)
                 {
                     b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
                     b.androidArchitecture = (AndroidArchitecture)EditorGUILayout.EnumPopup("Android Architecture", b.androidArchitecture);
@@ -323,9 +322,9 @@ namespace Soma.Build
                 
                 
 #if UNITY_EDITOR_OSX
-                if (b.target == BuildTarget.StandaloneOSX)
+                if (b.target == SomaBuildTarget.MacOS)
                 {
-                    b.macOSArchitecture = (MacOSArchitecture)EditorGUILayout.EnumPopup("MacOS Architecture", b.macOSArchitecture);
+                    b.macOSArchitecture = (SomaMacOSArchitecture)EditorGUILayout.EnumPopup("MacOS Architecture", b.macOSArchitecture);
                 }
 #endif
 
@@ -335,7 +334,7 @@ namespace Soma.Build
 
         private void DrawVRSectionGUI(BuildSetupEntry b)
         {
-            var targetGroup = BuildPipeline.GetBuildTargetGroup(b.target);
+            var targetGroup = BuildPipeline.GetBuildTargetGroup((BuildTarget)b.target);
             if (VRUtils.TargetGroupSupportsVirtualReality(targetGroup))
             {
                 b.supportsVR = EditorGUILayout.Toggle("VR Support", b.supportsVR);
@@ -362,6 +361,33 @@ namespace Soma.Build
             }
         }
 
+        private void DrawAddressableSectionGUI(BuildSetupEntry b)
+        {
+            b._guiShowAddressableOptions = EditorGUILayout.Foldout(b._guiShowAddressableOptions, "Addressable Options");
+            if (b._guiShowAddressableOptions)
+            {
+                EditorGUI.indentLevel++;
+                b.buildAddressables = EditorGUILayout.Toggle("Build Addressables", b.buildAddressables);
+                if (b.buildAddressables)
+                {
+                    b.contentOnlyBuild = EditorGUILayout.Toggle("Build ContentOnly", b.contentOnlyBuild);
+                    if (b.contentOnlyBuild)
+                    {
+                        
+                        GUILayout.BeginHorizontal();
+                        b.contentStateBinPathAddressable = EditorGUILayout.TextField("StateBinFile File", b.contentStateBinPathAddressable);
+                        if (GUILayout.Button("Choose"))
+                        {
+                            b.contentStateBinPathAddressable = EditorUtility.OpenFilePanel("Choose addressables_content_state.bin", buildSetup.exportDirectory, "bin");
+                        }
+                        GUILayout.EndHorizontal();
+                    }
+                    b.profileNameAddressable = EditorGUILayout.TextField("Profile Name", b.profileNameAddressable);
+   
+                }
+                EditorGUI.indentLevel--;
+            }
+        }
         private void BuildGame()
         {
             BuildProcess.Build(buildSetup);
