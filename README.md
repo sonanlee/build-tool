@@ -1,5 +1,5 @@
-# unity-build-tools
-Tools to automate and streamline Unity builds
+# build-tool for Unity
+Tools to automate and streamline Unity builds, initial repository is [unity-build-tools](https://github.com/attilioHimeki/unity-build-tools") by attilioHimeki.
 
 ## Enhanced Build Tools
 
@@ -9,14 +9,10 @@ Normally, for each build you'd need to switch platform, change the scripting def
 
 Using this tool, all the setup work will be done just once, and the necessary builds will be generated just by pressing a button, with no further input required.
 
-<div style="float: right">
-<img src="https://user-images.githubusercontent.com/4165016/77833524-52d7b200-713e-11ea-930c-073ccda68001.png" width="50%" max-width:400px>
-</div>
-
 ## Advanced Features
 
 ### Addressables
-The tool includes support to rebuild addressables, per-build. Since Unity doesn't provide a reliable way to detect if the Addressables package is installed in your editor, in order to show this option this you'll need to add ADDRESSABLES to your Scripting Define Symbols. Then, you can enable it in the Advanced Options of each build.
+The tool includes support to build addressables
 
 ### Command-Line
 

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253380dd133020d479401de850f8f0de, type: 3}
   m_Name: BuildSetup
   m_EditorClassIdentifier: 
-  rootDirectory: 
-  abortBatchOnFailure: 1
+  rootDirectory: /Users/sonanlee/Documents/GitHub/unity-build-test
+  abortBatchOnFailure: 0
   entriesList: []
