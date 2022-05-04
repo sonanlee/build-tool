@@ -36,6 +36,7 @@ namespace Soma.Build
         public SomaBuildTarget target = SomaBuildTarget.NoTarget;
         public bool developmentBuild;
         public string scriptingDefineSymbols = "";
+        public bool useDefaultBuildScenes = true;
         public List<string> customScenes;
 
         //VR
@@ -47,7 +48,6 @@ namespace Soma.Build
         public ManagedStrippingLevel strippingLevel;
         public ScriptingImplementation scriptingBackend = ScriptingImplementation.IL2CPP;
         public bool strictMode;
-        public bool detailedBuildReport;
         
         // Addressable
         public bool buildAddressables;
