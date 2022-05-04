@@ -8,14 +8,7 @@ namespace Soma.Build
         {
             var scenes = EditorBuildSettings.scenes;
 
-            var result = new string[scenes.Length];
-
-            for (var i = 0; i < scenes.Length; i++)
-            {
-                result[i] = scenes[i].path;
-            }
-
-            return result;
+            return scenes.Where(x => x.enabled).Select(x => x.path).ToArray();
         }
     }
 }
