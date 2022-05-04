@@ -155,9 +155,9 @@ namespace Soma.Build
                         GUI.backgroundColor = Color.green;
                         if (GUILayout.Button(new GUIContent("Build", "Build Entry"), GUILayout.ExpandWidth(false)))
                         {
-                            BuildProcess.Build(buildSetup, b.buildName, 0);
+                            BuildProcess.Build(buildSetup, b.buildName, null, 0);
                         }
-
+                    
                         GUI.backgroundColor = Color.white;
 
                         EditorGUILayout.EndHorizontal();
