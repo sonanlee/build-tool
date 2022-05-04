@@ -12,7 +12,6 @@ namespace Soma.Build
         private string _scriptingDefineSymbols;
         private ManagedStrippingLevel _strippingLevel;
         
-        private string[] _vrSdks;
         private bool _vrSupported;
 
         public void TakeSnapshot(BuildTargetGroup targetGroup)
@@ -25,7 +24,6 @@ namespace Soma.Build
             _strippingLevel = PlayerSettings.GetManagedStrippingLevel(targetGroup);
 
             _vrSupported = XRSettings.enabled;
-            _vrSdks = VRUtils.GetAvailableVRSdks(targetGroup);
             _androidAppBundleEnabled = EditorUserBuildSettings.buildAppBundle;
         }
 

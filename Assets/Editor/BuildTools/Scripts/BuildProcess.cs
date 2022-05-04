@@ -100,19 +100,23 @@ namespace Soma.Build
             PlayerSettings.bundleVersion = $"{PlayerSettings.bundleVersion}.{buildNumber}";
             
             var buildPlayerOptions = BuildUtils.GetBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
-            
-            var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-            var buildSummary = report.summary;
-            var success = buildSummary.result == BuildResult.Succeeded;
-            Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
+
+            if (setup.buildClient)
+            {
+                var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                var buildSummary = report.summary;
+                var success = buildSummary.result == BuildResult.Succeeded;
+                Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
+
+                if (!success && buildSetup.abortBatchOnFailure)
+                {
+                    Debug.LogError("Failure - Aborting remaining builds from batch");
+                }
+            }
 
             // Revert group build player settings after building
             playerSettingsSnapshot.ApplySnapshot();
 
-            if (!success && buildSetup.abortBatchOnFailure)
-            {
-                Debug.LogError("Failure - Aborting remaining builds from batch");
-            }
         }
         private static void Build(string buildSetupRelativePath, string buildEntryName, int buildNumber = 0)
         {
@@ -146,5 +150,6 @@ namespace Soma.Build
                 Debug.LogError("Cannot find build setup path, make sure to specify using " + BuildFilePathArg);
             }
         }
+
     }
 }

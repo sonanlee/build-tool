@@ -43,16 +43,18 @@ namespace Soma.Build
         public int vrSdkFlags;
 
         // Advanced Options
+        public bool buildClient;
         public ManagedStrippingLevel strippingLevel;
         public ScriptingImplementation scriptingBackend = ScriptingImplementation.IL2CPP;
         public bool strictMode;
         public bool detailedBuildReport;
+        
         // Addressable
         public bool buildAddressables;
         public bool contentOnlyBuild;
         public string contentStateBinPathAddressable;
         public string profileNameAddressable = "";
-
+        
         //MacOS
 #if UNITY_EDITOR_OSX
         public SomaMacOSArchitecture macOSArchitecture;
