@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 
 namespace Soma.Build
@@ -20,7 +21,7 @@ namespace Soma.Build
                 buildPlayerOptions.scenes = setupEntry.customScenes.ToArray();
             }
 
-            var pathName = rootDirPath + "/" + setupEntry.buildName;
+            var pathName = Path.Combine(rootDirPath, setupEntry.buildName, setupEntry.productName);
             if (setupEntry.target == SomaBuildTarget.Windows)
             {
                 if (!pathName.Contains(WindowsExtension))

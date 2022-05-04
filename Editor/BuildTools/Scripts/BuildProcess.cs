@@ -51,8 +51,9 @@ namespace Soma.Build
             playerSettingsSnapshot.TakeSnapshot(targetGroup);
 
             PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, $"{buildSetup.commonScriptingDefineSymbols},{setup.scriptingDefineSymbols}");
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, $"{buildSetup.commonScriptingDefineSymbols};{setup.scriptingDefineSymbols}");
             PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
+            PlayerSettings.productName = setup.productName;
 
             // VR
             XRSettings.enabled = VRUtils.TargetGroupSupportsVirtualReality(targetGroup) && setup.supportsVR;

@@ -16,6 +16,7 @@ namespace Soma.Build
         private string _buildNumber;
         private int _bundleVersionCode;
         private string _bundleVersion;
+        private string _productName;
 
         public void TakeSnapshot(BuildTargetGroup targetGroup)
         {
@@ -32,6 +33,7 @@ namespace Soma.Build
             _bundleVersionCode  = PlayerSettings.Android.bundleVersionCode;
             _buildNumber = PlayerSettings.iOS.buildNumber;
             _bundleVersion = PlayerSettings.bundleVersion;
+            _productName = PlayerSettings.productName;
         }
 
         public void ApplySnapshot()
@@ -47,6 +49,7 @@ namespace Soma.Build
             PlayerSettings.Android.bundleVersionCode = _bundleVersionCode;
             PlayerSettings.iOS.buildNumber = _buildNumber;
             PlayerSettings.bundleVersion = _bundleVersion;
+            PlayerSettings.productName = _productName;
         }
     }
 }

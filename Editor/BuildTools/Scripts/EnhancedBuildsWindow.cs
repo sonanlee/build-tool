@@ -237,6 +237,7 @@ namespace Soma.Build
         private void DrawBuildEntryGUI(BuildSetupEntry b)
         {
             b.buildName = EditorGUILayout.TextField("Build Name", b.buildName);
+            b.productName = EditorGUILayout.TextField("Product Name", b.productName);
             b.target = (SomaBuildTarget)EditorGUILayout.EnumPopup("Target", b.target);
             if (b.target > 0)
             {
