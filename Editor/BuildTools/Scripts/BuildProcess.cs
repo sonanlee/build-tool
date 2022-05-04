@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
@@ -14,9 +13,10 @@ namespace Soma.Build
     {
         private const string BuildEntryNameArg = "-buildEntryName";
         private const string BuildFilePathArg = "-buildSetupPath";
+        private const string BuildExportPathArg = "-buildExportPath";
         private const string BuildNumberArg = "-buildNumber";
         
-        public static void Build(BuildSetup buildSetup, string buildEntryName="", int buildNumber = 0)
+        public static void Build(BuildSetup buildSetup, string buildEntryName="", string buildExportPath = "", int buildNumber = 0)
         {
             var defaultScenes = ScenesUtils.GetDefaultScenesAsArray();
             var playerSettingsSnapshot = new PlayerSettingsSnapshot();
@@ -28,12 +28,12 @@ namespace Soma.Build
                 {
                     if (setup.enabled)
                     {
-                        BuildEntry(buildSetup, setup, playerSettingsSnapshot, defaultScenes, buildNumber);
+                        BuildEntry(buildSetup, setup, playerSettingsSnapshot, buildExportPath, defaultScenes, buildNumber);
                     }   
                 }
                 else if(buildEntryName == setup.buildName)
                 {
-                    BuildEntry(buildSetup, setup, playerSettingsSnapshot, defaultScenes, buildNumber);
+                    BuildEntry(buildSetup, setup, playerSettingsSnapshot, buildExportPath, defaultScenes, buildNumber);
                 }
                 else
                 {
@@ -42,9 +42,9 @@ namespace Soma.Build
             }
         }
 
-        private static void BuildEntry(BuildSetup buildSetup, BuildSetupEntry setup, PlayerSettingsSnapshot playerSettingsSnapshot, string[] defaultScenes, int buildNumber )
+        private static void BuildEntry(BuildSetup buildSetup, BuildSetupEntry setup, PlayerSettingsSnapshot playerSettingsSnapshot, string buildExportPath, string[] defaultScenes, int buildNumber )
         {
-            var path = buildSetup.exportDirectory;
+            var path = string.IsNullOrEmpty(buildExportPath) ? buildSetup.exportDirectory : buildExportPath;
             var target = setup.target;
             var targetGroup = BuildPipeline.GetBuildTargetGroup((BuildTarget)target);
 
@@ -118,12 +118,12 @@ namespace Soma.Build
             playerSettingsSnapshot.ApplySnapshot();
 
         }
-        private static void Build(string buildSetupRelativePath, string buildEntryName, int buildNumber = 0)
+        private static void Build(string buildSetupRelativePath, string buildEntryName, string buildExportPath, int buildNumber = 0)
         {
             var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupRelativePath, typeof(BuildSetup)) as BuildSetup;
             if (buildSetup != null)
             {
-                Build(buildSetup, buildEntryName, buildNumber);
+                Build(buildSetup, buildEntryName, buildExportPath, buildNumber);
             }
             else
             {
@@ -136,6 +136,7 @@ namespace Soma.Build
             var buildFilePath = CLIUtils.GetCommandLineArg(BuildFilePathArg);
             var buildEntryName = CLIUtils.GetCommandLineArg(BuildEntryNameArg);
             var buildNumberStr = CLIUtils.GetCommandLineArg(BuildNumberArg);
+            var buildExportPath = CLIUtils.GetCommandLineArg(BuildExportPathArg);
             var buildNumber = 0;
             if (!string.IsNullOrEmpty(buildNumberStr))
             {
@@ -143,7 +144,7 @@ namespace Soma.Build
             }
             if (!string.IsNullOrEmpty(buildFilePath))
             {
-                Build(buildFilePath, buildEntryName, buildNumber);
+                Build(buildFilePath, buildEntryName, buildExportPath, buildNumber);
             }
             else
             {
