@@ -32,7 +32,7 @@ namespace Soma.Build
     {
         public bool enabled = true;
         public string buildName = "";
-        public string productName = PlayerSettings.productName;
+        public string productName = "";
         public SomaBuildTarget target = SomaBuildTarget.NoTarget;
         public bool developmentBuild;
         public string scriptingDefineSymbols = "";
