@@ -13,6 +13,9 @@ namespace Soma.Build
         private ManagedStrippingLevel _strippingLevel;
         
         private bool _vrSupported;
+        private string _buildNumber;
+        private int _bundleVersionCode;
+        private string _bundleVersion;
 
         public void TakeSnapshot(BuildTargetGroup targetGroup)
         {
@@ -25,6 +28,10 @@ namespace Soma.Build
 
             _vrSupported = XRSettings.enabled;
             _androidAppBundleEnabled = EditorUserBuildSettings.buildAppBundle;
+            
+            _bundleVersionCode  = PlayerSettings.Android.bundleVersionCode;
+            _buildNumber = PlayerSettings.iOS.buildNumber;
+            _bundleVersion = PlayerSettings.bundleVersion;
         }
 
         public void ApplySnapshot()
@@ -33,7 +40,13 @@ namespace Soma.Build
             PlayerSettings.SetScriptingBackend(_buildTargetGroup, _scriptingBackend);
             PlayerSettings.SetManagedStrippingLevel(_buildTargetGroup, _strippingLevel);
             EditorUserBuildSettings.buildAppBundle = _androidAppBundleEnabled;
+            
             XRSettings.enabled = _vrSupported;
+            
+            
+            PlayerSettings.Android.bundleVersionCode = _bundleVersionCode;
+            PlayerSettings.iOS.buildNumber = _buildNumber;
+            PlayerSettings.bundleVersion = _bundleVersion;
         }
     }
 }

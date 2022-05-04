@@ -75,6 +75,11 @@ namespace Soma.Build
             {
                 GUILayout.Label("Loaded Build Setup", EditorStyles.boldLabel);
 
+                EditorGUILayout.LabelField("Product Name", Application.productName);
+                EditorGUILayout.LabelField("Company Name", Application.companyName);
+                EditorGUILayout.LabelField("Product Version", PlayerSettings.bundleVersion);
+                EditorGUILayout.LabelField("Unity Version", Application.unityVersion);
+
                 GUILayout.Space(10);
 
                 EditorGUIUtility.labelWidth = 200f;
@@ -140,11 +145,17 @@ namespace Soma.Build
                             }
                         }
 
-                        GUI.backgroundColor = Color.green;
+                        GUI.backgroundColor = Color.yellow;
                         if (GUILayout.Button(new GUIContent("c", "Duplicates Build Entry"), GUILayout.ExpandWidth(false)))
                         {
                             Undo.RecordObject(buildSetup, "Duplicate Build Setup Entry");
                             buildSetup.DuplicateBuildSetupEntry(b);
+                        }
+
+                        GUI.backgroundColor = Color.green;
+                        if (GUILayout.Button(new GUIContent("Build", "Build Entry"), GUILayout.ExpandWidth(false)))
+                        {
+                            BuildProcess.Build(buildSetup, b.buildName, 0);
                         }
 
                         GUI.backgroundColor = Color.white;
@@ -184,7 +195,7 @@ namespace Soma.Build
                 var isReady = buildSetup.IsReady();
                 using (new EditorGUI.DisabledScope(!isReady))
                 {
-                    if (GUILayout.Button("Build", GUILayout.ExpandWidth(true)))
+                    if (GUILayout.Button("Build All", GUILayout.ExpandWidth(true)))
                     {
                         BuildGame();
                     }
@@ -229,7 +240,8 @@ namespace Soma.Build
             b.target = (SomaBuildTarget)EditorGUILayout.EnumPopup("Target", b.target);
             if (b.target > 0)
             {
-                b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
+                b.buildClient = EditorGUILayout.Toggle("Build Client", b.buildClient);
+                b.developmentBuild = EditorGUILayout.Toggle("Development Build", b.developmentBuild);
                 b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
 
                 DrawScenesSectionGUI(b);
@@ -301,7 +313,6 @@ namespace Soma.Build
             if (b._guiShowAdvancedOptions)
             {
                 EditorGUI.indentLevel++;
-                b.buildClient = EditorGUILayout.Toggle("Build Client", b.buildClient);
                 b.detailedBuildReport = EditorGUILayout.Toggle("Detailed Build Report", b.detailedBuildReport);
                 b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup("Stripping Level", b.strippingLevel);
                 b.strictMode = EditorGUILayout.Toggle(new GUIContent("Strict Mode",

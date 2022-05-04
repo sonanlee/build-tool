@@ -33,7 +33,7 @@ namespace Soma.Build
         public bool enabled = true;
         public string buildName = "";
         public SomaBuildTarget target = SomaBuildTarget.NoTarget;
-        public bool debugBuild;
+        public bool developmentBuild;
         public string scriptingDefineSymbols = "";
         public bool useDefaultBuildScenes = true;
         public List<string> customScenes;
@@ -43,7 +43,7 @@ namespace Soma.Build
         public int vrSdkFlags;
 
         // Advanced Options
-        public bool buildClient;
+        public bool buildClient = true;
         public ManagedStrippingLevel strippingLevel;
         public ScriptingImplementation scriptingBackend = ScriptingImplementation.IL2CPP;
         public bool strictMode;

@@ -33,7 +33,7 @@ namespace Soma.Build
             
 
             var buildOptions = BuildOptions.None;
-            if (setupEntry.debugBuild)
+            if (setupEntry.developmentBuild)
             {
                 buildOptions |= BuildOptions.Development;
             }
