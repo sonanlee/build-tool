@@ -314,7 +314,6 @@ namespace Soma.Build
             if (b._guiShowAdvancedOptions)
             {
                 EditorGUI.indentLevel++;
-                b.detailedBuildReport = EditorGUILayout.Toggle("Detailed Build Report", b.detailedBuildReport);
                 b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup("Stripping Level", b.strippingLevel);
                 b.strictMode = EditorGUILayout.Toggle(new GUIContent("Strict Mode",
                         "Do not allow the build to succeed if any errors are reported."),

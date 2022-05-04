@@ -52,11 +52,6 @@ namespace Soma.Build
                 }
             }
 
-            if (setupEntry.detailedBuildReport)
-            {
-                buildOptions |= BuildOptions.DetailedBuildReport;
-            }
-
             buildPlayerOptions.options = buildOptions;
 
             return buildPlayerOptions;
