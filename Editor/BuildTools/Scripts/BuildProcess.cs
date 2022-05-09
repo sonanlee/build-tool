@@ -3,7 +3,9 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Build;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.Build.Reporting;
+#if UNITY_EDITOR_OSX
 using UnityEditor.OSXStandalone;
+#endif
 using UnityEngine;
 using UnityEngine.XR;
 

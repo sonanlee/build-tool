@@ -6,6 +6,7 @@ using UnityEditor.OSXStandalone;
 #endif
 
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Soma.Build
 {
@@ -247,8 +248,11 @@ namespace Soma.Build
 
                 DrawScenesSectionGUI(b);
                 DrawAdvancedOptionsSectionGUI(b);
-                DrawAddressableSectionGUI(b);
                 DrawVRSectionGUI(b);
+            }
+            else
+            {
+                DrawAddressableSectionGUI(b);
             }
         }
 
@@ -384,14 +388,8 @@ namespace Soma.Build
                     b.contentOnlyBuild = EditorGUILayout.Toggle("Build ContentOnly", b.contentOnlyBuild);
                     if (b.contentOnlyBuild)
                     {
-                        
-                        GUILayout.BeginHorizontal();
-                        b.contentStateBinPathAddressable = EditorGUILayout.TextField("StateBinFile File", b.contentStateBinPathAddressable);
-                        if (GUILayout.Button("Choose"))
-                        {
-                            b.contentStateBinPathAddressable = EditorUtility.OpenFilePanel("Choose addressables_content_state.bin", buildSetup.exportDirectory, "bin");
-                        }
-                        GUILayout.EndHorizontal();
+                        b.contentStateBinPathAddressable = $"Assets/AddressableAssetsData/{PlatformMappingService.GetPlatformPathSubFolder()}/addressables_content_state.bin";
+                        EditorGUILayout.LabelField("StateBinFile File", b.contentStateBinPathAddressable);
                     }
                     b.profileNameAddressable = EditorGUILayout.TextField("Profile Name", b.profileNameAddressable);
    

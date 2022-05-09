@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 253380dd133020d479401de850f8f0de, type: 3}
-  m_Name: buildSetup
+  m_Name: BuildSetup
   m_EditorClassIdentifier: 
-  exportDirectory: /Users/sonanlee/Documents/GitHub/unity-build-test/Export
+  exportDirectory: /Users/sonanlee/Desktop/Build
   abortBatchOnFailure: 0
-  commonScriptingDefineSymbols: STARTER_ASSETS_PACKAGES_CHECKED
+  commonScriptingDefineSymbols: VIMEO_AVPRO_VIDEO_SUPPORT;TextMeshPro
   entriesList:
   - enabled: 1
-    buildName: local-macOS-dev
+    buildName: soma-macOS-dev
+    productName: soma-dev
     target: 2
-    developmentBuild: 1
-    scriptingDefineSymbols: 
+    developmentBuild: 0
+    scriptingDefineSymbols: SKIP_VERSION_CHECK; STAGE_DEV
     useDefaultBuildScenes: 1
     customScenes: []
     supportsVR: 0
@@ -29,40 +30,172 @@ MonoBehaviour:
     strippingLevel: 1
     scriptingBackend: 1
     strictMode: 1
-    detailedBuildReport: 1
     buildAddressables: 0
-    contentOnlyBuild: 1
+    contentOnlyBuild: 0
     contentStateBinPathAddressable: 
-    profileNameAddressable: Default
+    profileNameAddressable: 
     macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
-    buildName: local-win-dev
-    target: 19
-    developmentBuild: 1
-    scriptingDefineSymbols: 
+    buildName: soma-macOS-prod
+    productName: soma
+    target: 2
+    developmentBuild: 0
+    scriptingDefineSymbols: STAGE_PROD
     useDefaultBuildScenes: 1
     customScenes: []
     supportsVR: 0
     vrSdkFlags: 0
     buildClient: 1
     strippingLevel: 1
-    scriptingBackend: 0
+    scriptingBackend: 1
     strictMode: 1
-    detailedBuildReport: 1
     buildAddressables: 0
-    contentOnlyBuild: 1
+    contentOnlyBuild: 0
     contentStateBinPathAddressable: 
-    profileNameAddressable: Default
+    profileNameAddressable: 
     macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
-    buildName: local-macOS-dev-addressable
-    target: 2
+    buildName: soma-Windows-dev
+    productName: soma-dev
+    target: 19
+    developmentBuild: 0
+    scriptingDefineSymbols: SKIP_VERSION_CHECK;STAGE_DEV
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 0
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
+    buildAddressables: 1
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: CCD
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 0
+    androidAppBundle: 0
+    androidArchitecture: 0
+  - enabled: 1
+    buildName: soma-Windows-prod
+    productName: soma
+    target: 19
+    developmentBuild: 0
+    scriptingDefineSymbols: STAGE_PROD
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 1
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
+    buildAddressables: 0
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: 
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 0
+    androidAppBundle: 0
+    androidArchitecture: 0
+  - enabled: 1
+    buildName: soma-Android-dev
+    productName: soma-dev
+    target: 13
+    developmentBuild: 0
+    scriptingDefineSymbols: SKIP_VERSION_CHECK;STAGE_DEV;UNITY_ANDROID
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 1
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
+    buildAddressables: 0
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: 
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 0
+    androidAppBundle: 0
+    androidArchitecture: 4294967295
+  - enabled: 1
+    buildName: soma-Android-prod
+    productName: soma
+    target: 13
+    developmentBuild: 0
+    scriptingDefineSymbols: STAGE_PROD;UNITY_ANDROID
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 1
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
+    buildAddressables: 0
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: 
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 0
+    androidAppBundle: 1
+    androidArchitecture: 4294967295
+  - enabled: 1
+    buildName: soma-iOS-dev
+    productName: soma-dev
+    target: 9
+    developmentBuild: 0
+    scriptingDefineSymbols: SKIP_VERSION_CHECK; STAGE_DEV;UNITY_IOS
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 1
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
+    buildAddressables: 0
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: 
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 0
+    androidAppBundle: 0
+    androidArchitecture: 4294967295
+  - enabled: 1
+    buildName: soma-iOS-prod
+    productName: soma
+    target: 9
+    developmentBuild: 0
+    scriptingDefineSymbols: STAGE_PROD;UNITY_IOS
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 1
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
+    buildAddressables: 0
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: 
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 1
+    androidAppBundle: 0
+    androidArchitecture: 4294967295
+  - enabled: 1
+    buildName: Addressable-CCD-Rebuild
+    productName: soma
+    target: -2
     developmentBuild: 0
     scriptingDefineSymbols: 
     useDefaultBuildScenes: 1
@@ -73,11 +206,32 @@ MonoBehaviour:
     strippingLevel: 1
     scriptingBackend: 1
     strictMode: 1
-    detailedBuildReport: 1
+    buildAddressables: 1
+    contentOnlyBuild: 0
+    contentStateBinPathAddressable: 
+    profileNameAddressable: CCD
+    macOSArchitecture: 0
+    iosSymlinkLibraries: 0
+    androidAppBundle: 0
+    androidArchitecture: 0
+  - enabled: 1
+    buildName: Addressable-CCD-BuildContent
+    productName: soma
+    target: -2
+    developmentBuild: 0
+    scriptingDefineSymbols: 
+    useDefaultBuildScenes: 1
+    customScenes: []
+    supportsVR: 0
+    vrSdkFlags: 0
+    buildClient: 0
+    strippingLevel: 1
+    scriptingBackend: 1
+    strictMode: 1
     buildAddressables: 1
     contentOnlyBuild: 1
-    contentStateBinPathAddressable: /Users/sonanlee/Documents/GitHub/unity-build-test/tps/Assets/AddressableAssetsData/OSX/addressables_content_state.bin
-    profileNameAddressable: Default
+    contentStateBinPathAddressable: Assets/AddressableAssetsData/OSX/addressables_content_state.bin
+    profileNameAddressable: CCD
     macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
