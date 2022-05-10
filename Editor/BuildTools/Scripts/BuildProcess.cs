@@ -64,7 +64,7 @@ namespace Soma.Build
             if (target == SomaBuildTarget.Android)
             {
                 EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
-                PlayerSettings.Android.targetArchitectures = setup.androidArchitecture;
+                PlayerSettings.Android.targetArchitectures = (AndroidArchitecture)setup.androidArchitecture;
             }
 
 #if UNITY_EDITOR_OSX

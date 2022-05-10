@@ -18,6 +18,11 @@ namespace Soma.Build
         Android = BuildTarget.Android
     }
 
+    public enum SomaAndroidArchitecture
+    {
+        Android = (int) (AndroidArchitecture.ARM64 | AndroidArchitecture.ARMv7),
+        ChromeOS = (int) (AndroidArchitecture.X86 | AndroidArchitecture.X86_64)
+    }
     #if UNITY_EDITOR_OSX
     public enum SomaMacOSArchitecture
     {
@@ -64,7 +69,7 @@ namespace Soma.Build
 
         //Android
         public bool androidAppBundle;
-        public AndroidArchitecture androidArchitecture;
+        public SomaAndroidArchitecture androidArchitecture;
 
         [NonSerialized] public bool _guiShowAdvancedOptions = false;
         [NonSerialized] public bool _guiShowCustomScenes = false;

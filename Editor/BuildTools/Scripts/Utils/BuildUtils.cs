@@ -7,6 +7,8 @@ namespace Soma.Build
     {
         public const string SetupsDirectory = "Assets/Plugins/build-tool/Editor/BuildTools/";
         private const string WindowsExtension = ".exe";
+        private const string AndroidExtension = ".apk";
+        private const string AndroidStoreExtension = ".aab";
 
         public static BuildPlayerOptions GetBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
         {
@@ -27,6 +29,19 @@ namespace Soma.Build
                 if (!pathName.Contains(WindowsExtension))
                 {
                     pathName += WindowsExtension;
+                }
+            }
+
+            if (setupEntry.target == SomaBuildTarget.Android)
+            {
+                var ext = AndroidExtension;
+                if (setupEntry.androidAppBundle)
+                {
+                    ext = AndroidStoreExtension;
+                }
+                if (!pathName.Contains(ext))
+                {
+                    pathName += ext;
                 }
             }
 

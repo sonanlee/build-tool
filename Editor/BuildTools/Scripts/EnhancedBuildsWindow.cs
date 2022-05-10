@@ -156,7 +156,7 @@ namespace Soma.Build
                         GUI.backgroundColor = Color.green;
                         if (GUILayout.Button(new GUIContent("Build", "Build Entry"), GUILayout.ExpandWidth(false)))
                         {
-                            BuildProcess.Build(buildSetup, b.buildName, null, 0);
+                            BuildProcess.Build(buildSetup, b.buildName, null, 1);
                         }
                     
                         GUI.backgroundColor = Color.white;
@@ -332,7 +332,7 @@ namespace Soma.Build
                 if (b.target == SomaBuildTarget.Android)
                 {
                     b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
-                    b.androidArchitecture = (AndroidArchitecture)EditorGUILayout.EnumPopup("Android Architecture", b.androidArchitecture);
+                    b.androidArchitecture = (SomaAndroidArchitecture)EditorGUILayout.EnumPopup("Android Architecture", b.androidArchitecture);
                 }
                 
                 

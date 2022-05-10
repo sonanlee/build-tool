@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253380dd133020d479401de850f8f0de, type: 3}
   m_Name: BuildSetup
   m_EditorClassIdentifier: 
-  exportDirectory: /Users/sonanlee/Desktop/Build
+  exportDirectory: /Users/butler/Documents/Temp
   abortBatchOnFailure: 0
   commonScriptingDefineSymbols: VIMEO_AVPRO_VIDEO_SUPPORT;TextMeshPro
   entriesList:
@@ -70,9 +70,9 @@ MonoBehaviour:
     customScenes: []
     supportsVR: 0
     vrSdkFlags: 0
-    buildClient: 0
+    buildClient: 1
     strippingLevel: 1
-    scriptingBackend: 1
+    scriptingBackend: 0
     strictMode: 1
     buildAddressables: 1
     contentOnlyBuild: 0
@@ -94,7 +94,7 @@ MonoBehaviour:
     vrSdkFlags: 0
     buildClient: 1
     strippingLevel: 1
-    scriptingBackend: 1
+    scriptingBackend: 0
     strictMode: 1
     buildAddressables: 0
     contentOnlyBuild: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
     macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
-    androidArchitecture: 4294967295
+    androidArchitecture: 3
   - enabled: 1
     buildName: soma-Android-prod
     productName: soma
@@ -147,7 +147,7 @@ MonoBehaviour:
     macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 1
-    androidArchitecture: 4294967295
+    androidArchitecture: 3
   - enabled: 1
     buildName: soma-iOS-dev
     productName: soma-dev
@@ -167,9 +167,9 @@ MonoBehaviour:
     contentStateBinPathAddressable: 
     profileNameAddressable: 
     macOSArchitecture: 0
-    iosSymlinkLibraries: 0
+    iosSymlinkLibraries: 1
     androidAppBundle: 0
-    androidArchitecture: 4294967295
+    androidArchitecture: -1
   - enabled: 1
     buildName: soma-iOS-prod
     productName: soma
@@ -191,7 +191,7 @@ MonoBehaviour:
     macOSArchitecture: 0
     iosSymlinkLibraries: 1
     androidAppBundle: 0
-    androidArchitecture: 4294967295
+    androidArchitecture: -1
   - enabled: 1
     buildName: Addressable-CCD-Rebuild
     productName: soma
