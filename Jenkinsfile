@@ -1,11 +1,14 @@
 pipeline {
   agent any
+  environment {
+      MY_PROJECT_NAME = "${JOB_NAME}"
+  }
   stages {
     stage('error') {
       steps {
         script {
           def allJob = env.JOB_NAME.tokenize('/') as String[];
-          def projectName = allJob[0];
+          MY_PROJECT_NAME = allJob[0];
         }
 
         echo "0 : ${JOB_NAME}"
@@ -15,7 +18,7 @@ pipeline {
         echo "C : ${currentBuild.fullProjectName}"
         echo "D : ${currentBuild.displayName}"
         echo "F : ${currentBuild.fullProjectName}"
-        echo "G : ${projectName}"
+        echo "G : ${MY_PROJECT_NAME}"
       }
     }
 
