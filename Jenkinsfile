@@ -11,7 +11,7 @@ pipeline {
         echo "A : ${JOB_BASE_NAME}"
         echo "B : ${BRANCH_NAME}"
         echo "C : ${currentBuild.projectName}"
-        echo "C : ${currentBuild.fullprojectName}"
+        echo "C : ${currentBuild.fullProjectName}"
         echo "D : ${currentBuild.displayName}"
         echo "F : ${currentBuild.fullProjectName}"
         echo "G : ${projectName}"
