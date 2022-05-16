@@ -8,6 +8,7 @@ pipeline {
           def projectName = allJob[0];
         }
 
+        echo "0 : ${JOB_NAME}"
         echo "A : ${JOB_BASE_NAME}"
         echo "B : ${BRANCH_NAME}"
         echo "C : ${currentBuild.projectName}"
