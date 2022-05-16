@@ -3,8 +3,10 @@ pipeline {
   stages {
     stage('error') {
       steps {
-        echo 'Hi : ${JOB_BASE_NAME}'
-        echo 'Bye : ${BRANCH_NAME}'
+        echo 'A : ${JOB_BASE_NAME}'
+        echo 'B : ${BRANCH_NAME}'
+        echo 'C : ${currentBuild.projectName}'
+        echo 'D : ${currentBuild.displayName}'
       }
     }
 
