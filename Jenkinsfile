@@ -1,3 +1,9 @@
+def defaultDeploy = "Win64"
+def allJob = env.JOB_NAME.tokenize('/') as String[];
+MAIN_PROJECT_NAME = allJob.first();
+def allTokens = MAIN_PROJECT_NAME.tokenize('-') as String[];
+PLATFORM = allTokens.last();
+
 pipeline {
   agent any
   environment {
@@ -19,6 +25,8 @@ pipeline {
         echo "D : ${currentBuild.displayName}"
         echo "F : ${currentBuild.fullProjectName}"
         echo "G : ${MY_PROJECT_NAME}"
+        echo "H : ${MAIN_PROJECT_NAME}"
+        echo "I : ${PLATFORM}"
       }
     }
 
