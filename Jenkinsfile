@@ -1,5 +1,5 @@
 def defaultDeploy = "Win64"
-def allJob = JOB_NAME.tokenize('/') as String[];
+def allJob = currentBuild.fullDisplayName.tokenize('/') as String[];
 MAIN_PROJECT_NAME = allJob.first();
 def allTokens = MAIN_PROJECT_NAME.tokenize('-') as String[];
 PLATFORM = allTokens.last();
@@ -18,7 +18,7 @@ pipeline {
         echo "C : ${currentBuild.projectName}"
         echo "C : ${currentBuild.fullProjectName}"
         echo "D : ${currentBuild.displayName}"
-        echo "F : ${currentBuild.fullProjectName}"
+        echo "F : ${currentBuild.fullDisplayName}"
         echo "H : ${MAIN_PROJECT_NAME}"
         echo "I : ${PLATFORM}"
       }
