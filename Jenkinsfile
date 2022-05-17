@@ -1,5 +1,5 @@
 def defaultDeploy = "Win64"
-def allJob = env.JOB_NAME.tokenize('/') as String[];
+def allJob = JOB_NAME.tokenize('/') as String[];
 MAIN_PROJECT_NAME = allJob.first();
 def allTokens = MAIN_PROJECT_NAME.tokenize('-') as String[];
 PLATFORM = allTokens.last();
