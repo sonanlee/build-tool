@@ -21,6 +21,7 @@ pipeline {
         echo "F : ${currentBuild.fullDisplayName}"
         echo "H : ${MAIN_PROJECT_NAME}"
         echo "I : ${PLATFORM}"
+        echo "I : ${currentBuild.changeSets.getKind()}"
       }
     }
 
