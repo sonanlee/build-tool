@@ -26,6 +26,20 @@ pipeline {
         echo "I : ${GIT_COMMIT}"
       }
     }
+    stage ('if'){
+      steps {
+        script {
+          if (MY_PROJECT_NAME == JOB_NAME)
+          {
+            echo("hello")
+          }
+          else
+          {
+            echo("bye")
+          }
+        }
+      }
+    }
 
   }
 }
