@@ -6,6 +6,10 @@ PLATFORM = allTokens.last();
 
 pipeline {
   agent any
+  parameters {
+      choice (choices:['Addressable-CCD-BuildContent','Addressable-CCD-Rebuild'], name:'entryName', description:"Choose Build Entry")
+      string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
+  }
   environment {
       MY_PROJECT_NAME = "${JOB_NAME}"
   }
@@ -14,7 +18,7 @@ pipeline {
       steps {
         echo "0 : ${JOB_NAME}"
         echo "A : ${JOB_BASE_NAME}"
-        echo "B : ${BRANCH_NAME}"
+        echo "B : ${params.entryName}"
         echo "C : ${currentBuild.projectName}"
         echo "C : ${currentBuild.fullProjectName}"
         echo "D : ${currentBuild.displayName}"
@@ -24,6 +28,7 @@ pipeline {
         echo "I : ${currentBuild.changeSets.first().getKind()}"
         echo "I : ${currentBuild.changeSets.last().getKind()}"
         echo "I : ${GIT_COMMIT}"
+        echo "I : ${params.RequestUser}"
       }
     }
     stage ('if'){
