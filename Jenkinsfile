@@ -7,6 +7,7 @@ PLATFORM = allTokens.last();
 pipeline {
   agent any
   parameters {
+      booleanParam(name: 'CleanBuild', defaultValue: false, description: 'Is Clean Build? (Remove previous build libraries)')
       choice (choices:['Addressable-CCD-BuildContent','Addressable-CCD-Rebuild'], name:'entryName', description:"Choose Build Entry")
       string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
   }
@@ -19,16 +20,15 @@ pipeline {
         echo "0 : ${JOB_NAME}"
         echo "A : ${JOB_BASE_NAME}"
         echo "B : ${params.entryName}"
+        echo "B : ${params.CleanBuild}"
+        echo "I : ${params.RequestUser}"
         echo "C : ${currentBuild.projectName}"
         echo "C : ${currentBuild.fullProjectName}"
         echo "D : ${currentBuild.displayName}"
         echo "F : ${currentBuild.fullDisplayName}"
         echo "H : ${MAIN_PROJECT_NAME}"
         echo "I : ${PLATFORM}"
-        echo "I : ${currentBuild.changeSets.first().getKind()}"
-        echo "I : ${currentBuild.changeSets.last().getKind()}"
         echo "I : ${GIT_COMMIT}"
-        echo "I : ${params.RequestUser}"
       }
     }
     stage ('if'){
