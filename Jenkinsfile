@@ -23,6 +23,7 @@ pipeline {
         echo "I : ${PLATFORM}"
         echo "I : ${currentBuild.changeSets.first().getKind()}"
         echo "I : ${currentBuild.changeSets.last().getKind()}"
+        echo "I : ${GIT_COMMIT}"
       }
     }
 
