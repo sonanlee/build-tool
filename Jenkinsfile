@@ -22,6 +22,7 @@ pipeline {
     stage('only-script'){
       when {
         expression { params.Refresh == true }
+        expression { params.CleanBuild == true }
       }
       steps{
         echo("Refresh")
