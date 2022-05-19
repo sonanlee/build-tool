@@ -13,12 +13,18 @@ pipeline {
       string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
   }
   options {
-    skipDefaultCheckout params.IsBuild
+    skipDefaultCheckout !params.IsBuild
   }
   environment {
       MY_PROJECT_NAME = "${JOB_NAME}"
   }
   stages {
+    stage('only-script'){
+      when {
+        expression { params.IsBuild == false }
+      }
+      currentBuild.result = 'UNSTABLE';
+    }
     stage('error') {
       steps {
         echo "0 : ${JOB_NAME}"
@@ -50,5 +56,16 @@ pipeline {
       }
     }
 
+  }
+  post {
+      always {
+          echo 'End Build'
+      }
+      success {
+          echo "success"
+      }
+      unstable {
+          echo 'I am unstable :/'
+      }
   }
 }
