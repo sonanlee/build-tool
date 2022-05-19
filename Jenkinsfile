@@ -23,7 +23,11 @@ pipeline {
       when {
         expression { params.IsBuild == false }
       }
-      currentBuild.result = 'UNSTABLE';
+      steps{
+        script{
+          currentBuild.result = 'UNSTABLE';
+        }
+      }
     }
     stage('error') {
       steps {
