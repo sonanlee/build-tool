@@ -7,9 +7,13 @@ PLATFORM = allTokens.last();
 pipeline {
   agent any
   parameters {
+      booleanParam(name: 'IsBuild', defaultValue: false, description: 'Do you want to build?')
       booleanParam(name: 'CleanBuild', defaultValue: false, description: 'Is Clean Build? (Remove previous build libraries)')
       choice (choices:['Addressable-CCD-BuildContent','Addressable-CCD-Rebuild'], name:'entryName', description:"Choose Build Entry")
       string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
+  }
+  options {
+    skipDefaultCheckout params.IsBuild
   }
   environment {
       MY_PROJECT_NAME = "${JOB_NAME}"
