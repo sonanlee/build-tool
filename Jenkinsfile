@@ -13,7 +13,7 @@ pipeline {
       string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
   }
   options {
-    skipDefaultCheckout !params.IsBuild
+    skipDefaultCheckout params.Refresh
   }
   environment {
       MY_PROJECT_NAME = "${JOB_NAME}"
