@@ -36,6 +36,11 @@ pipeline {
         expression { params.Refresh == false }
       }
       steps {
+        lock('CCDAccess') {
+          echo 'Do something here that requires unique access to the resource'
+          // any other build will wait until the one locking the resource leaves this block
+          sleep 30
+        }
         echo "0 : ${JOB_NAME}"
         echo "A : ${JOB_BASE_NAME}"
         echo "B : ${params.entryName}"
