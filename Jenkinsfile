@@ -7,7 +7,7 @@ PLATFORM = allTokens.last();
 pipeline {
   agent any
   parameters {
-      booleanParam(name: 'IsBuild', defaultValue: false, description: 'Do you want to build?')
+      booleanParam(name: 'Refresh', defaultValue: true, description: 'Do you want to build?')
       booleanParam(name: 'CleanBuild', defaultValue: false, description: 'Is Clean Build? (Remove previous build libraries)')
       choice (choices:['Addressable-CCD-BuildContent','Addressable-CCD-Rebuild'], name:'entryName', description:"Choose Build Entry")
       string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
@@ -21,15 +21,16 @@ pipeline {
   stages {
     stage('only-script'){
       when {
-        expression { params.IsBuild == false }
+        expression { params.Refresh == true }
       }
       steps{
-        script{
-          currentBuild.result = 'UNSTABLE';
-        }
+        echo("Refresh")
       }
     }
     stage('error') {
+      when {
+        expression { params.Refresh == false }
+      }
       steps {
         echo "0 : ${JOB_NAME}"
         echo "A : ${JOB_BASE_NAME}"
@@ -46,6 +47,9 @@ pipeline {
       }
     }
     stage ('if'){
+      when {
+        expression { params.Refresh == false }
+      }
       steps {
         script {
           if (MY_PROJECT_NAME == JOB_NAME)
