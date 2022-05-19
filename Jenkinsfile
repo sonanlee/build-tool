@@ -25,6 +25,9 @@ pipeline {
       }
       steps{
         echo("Refresh")
+        script{
+          currentBuild.result ="UNSTABLE"
+        }
       }
     }
     stage('error') {
