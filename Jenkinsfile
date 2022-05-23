@@ -15,6 +15,7 @@ pipeline {
   options {
     disableConcurrentBuilds abortPrevious: false
     skipDefaultCheckout params.Refresh
+    ansiColor('xterm')
   }
   environment {
       MY_PROJECT_NAME = "${JOB_NAME}"
