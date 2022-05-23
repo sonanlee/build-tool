@@ -13,7 +13,7 @@ pipeline {
       string(name:'RequestUser', defaultValue:'SomaButler', description:'Build를 요청한 User를 넣어주세요.')
   }
   options {
-    disableConcurrentBuilds abortPrevious: !params.Refresh
+    disableConcurrentBuilds abortPrevious: false
     skipDefaultCheckout params.Refresh
   }
   environment {
