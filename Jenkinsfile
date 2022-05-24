@@ -23,6 +23,7 @@ pipeline {
   stages {
     stage('scm')
     {
+      echo "start scm"
       checkout scm
     }
     stage('only-script'){
