@@ -21,10 +21,11 @@ pipeline {
       MY_PROJECT_NAME = "${JOB_NAME}"
   }
   stages {
-    stage('scm')
-    {
-      echo "start scm"
-      checkout scm
+    stage('scm'){
+      steps{
+        echo "start scm"
+        checkout scm
+      }
     }
     stage('only-script'){
       when {
