@@ -14,13 +14,17 @@ pipeline {
   }
   options {
     disableConcurrentBuilds abortPrevious: false
-    skipDefaultCheckout params.Refresh
+    skipDefaultCheckout true
     ansiColor('xterm')
   }
   environment {
       MY_PROJECT_NAME = "${JOB_NAME}"
   }
   stages {
+    stage('scm')
+    {
+      checkout scm
+    }
     stage('only-script'){
       when {
         expression { params.Refresh == true }
