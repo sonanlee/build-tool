@@ -18,9 +18,11 @@ MonoBehaviour:
   entriesList:
   - enabled: 1
     buildName: soma-macOS-dev
-    productName: soma-dev
+    productName: Soma.dev
     target: 2
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: SKIP_VERSION_CHECK; STAGE_DEV
     useDefaultBuildScenes: 1
     customScenes: []
@@ -29,20 +31,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
     buildName: soma-macOS-prod
-    productName: soma
+    productName: Soma
     target: 2
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: STAGE_PROD
     useDefaultBuildScenes: 1
     customScenes: []
@@ -51,20 +53,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
     buildName: soma-Windows-dev
-    productName: soma-dev
+    productName: Soma.dev
     target: 19
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: SKIP_VERSION_CHECK;STAGE_DEV
     useDefaultBuildScenes: 1
     customScenes: []
@@ -73,20 +75,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 0
-    strictMode: 1
+    strictMode: 0
     buildAddressables: 1
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
+    contentOnlyBuild: 1
     profileNameAddressable: CCD
-    macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
     buildName: soma-Windows-prod
-    productName: soma
+    productName: Soma
     target: 19
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: STAGE_PROD
     useDefaultBuildScenes: 1
     customScenes: []
@@ -95,20 +97,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 0
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
     buildName: soma-Android-dev
-    productName: soma-dev
+    productName: Soma.dev
     target: 13
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: SKIP_VERSION_CHECK;STAGE_DEV;UNITY_ANDROID
     useDefaultBuildScenes: 1
     customScenes: []
@@ -117,20 +119,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 3
   - enabled: 1
     buildName: soma-Android-prod
-    productName: soma
+    productName: Soma
     target: 13
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: STAGE_PROD;UNITY_ANDROID
     useDefaultBuildScenes: 1
     customScenes: []
@@ -139,20 +141,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 0
     androidAppBundle: 1
     androidArchitecture: 3
   - enabled: 1
     buildName: soma-iOS-dev
-    productName: soma-dev
+    productName: Soma.dev
     target: 9
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: SKIP_VERSION_CHECK; STAGE_DEV;UNITY_IOS
     useDefaultBuildScenes: 1
     customScenes: []
@@ -161,20 +163,20 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 1
     androidAppBundle: 0
     androidArchitecture: -1
   - enabled: 1
     buildName: soma-iOS-prod
-    productName: soma
+    productName: Soma
     target: 9
     developmentBuild: 0
+    autoConnectProfiler: 0
+    deepProfiling: 0
     scriptingDefineSymbols: STAGE_PROD;UNITY_IOS
     useDefaultBuildScenes: 1
     customScenes: []
@@ -183,21 +185,21 @@ MonoBehaviour:
     buildClient: 1
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
-    buildAddressables: 0
-    contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
-    profileNameAddressable: 
-    macOSArchitecture: 0
+    strictMode: 0
+    buildAddressables: 1
+    contentOnlyBuild: 1
+    profileNameAddressable: CCD
     iosSymlinkLibraries: 1
     androidAppBundle: 0
     androidArchitecture: -1
   - enabled: 1
     buildName: Addressable-CCD-Rebuild
-    productName: soma
-    target: -2
+    productName: Soma
+    target: 2
     developmentBuild: 0
-    scriptingDefineSymbols: 
+    autoConnectProfiler: 0
+    deepProfiling: 0
+    scriptingDefineSymbols: STAGE_PROD
     useDefaultBuildScenes: 1
     customScenes: []
     supportsVR: 0
@@ -205,21 +207,21 @@ MonoBehaviour:
     buildClient: 0
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
+    strictMode: 0
     buildAddressables: 1
     contentOnlyBuild: 0
-    contentStateBinPathAddressable: 
     profileNameAddressable: CCD
-    macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0
   - enabled: 1
     buildName: Addressable-CCD-BuildContent
-    productName: soma
-    target: -2
+    productName: Soma
+    target: 2
     developmentBuild: 0
-    scriptingDefineSymbols: 
+    autoConnectProfiler: 0
+    deepProfiling: 0
+    scriptingDefineSymbols: STAGE_PROD
     useDefaultBuildScenes: 1
     customScenes: []
     supportsVR: 0
@@ -227,12 +229,10 @@ MonoBehaviour:
     buildClient: 0
     strippingLevel: 1
     scriptingBackend: 1
-    strictMode: 1
+    strictMode: 0
     buildAddressables: 1
     contentOnlyBuild: 1
-    contentStateBinPathAddressable: Assets/AddressableAssetsData/OSX/addressables_content_state.bin
     profileNameAddressable: CCD
-    macOSArchitecture: 0
     iosSymlinkLibraries: 0
     androidAppBundle: 0
     androidArchitecture: 0

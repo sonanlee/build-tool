@@ -52,6 +52,15 @@ namespace Soma.Build
             if (setupEntry.developmentBuild)
             {
                 buildOptions |= BuildOptions.Development;
+                if (setupEntry.autoConnectProfiler)
+                {
+                    buildOptions |= BuildOptions.ConnectWithProfiler;
+                }
+
+                if (setupEntry.deepProfiling)
+                {
+                    buildOptions |= BuildOptions.EnableDeepProfilingSupport;
+                }
             }
 
             if (setupEntry.strictMode)

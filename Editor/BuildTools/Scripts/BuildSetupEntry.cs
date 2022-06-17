@@ -40,6 +40,8 @@ namespace Soma.Build
         public string productName = "";
         public SomaBuildTarget target = SomaBuildTarget.NoTarget;
         public bool developmentBuild;
+        public bool autoConnectProfiler;
+        public bool deepProfiling;
         public string scriptingDefineSymbols = "";
         public bool useDefaultBuildScenes = true;
         public List<string> customScenes;
@@ -57,7 +59,7 @@ namespace Soma.Build
         // Addressable
         public bool buildAddressables;
         public bool contentOnlyBuild;
-        public string contentStateBinPathAddressable;
+        //public string contentStateBinPathAddressable;
         public string profileNameAddressable = "";
         
         //MacOS

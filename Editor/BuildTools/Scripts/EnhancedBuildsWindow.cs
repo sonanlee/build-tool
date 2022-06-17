@@ -244,15 +244,17 @@ namespace Soma.Build
             {
                 b.buildClient = EditorGUILayout.Toggle("Build Client", b.buildClient);
                 b.developmentBuild = EditorGUILayout.Toggle("Development Build", b.developmentBuild);
+                if (b.developmentBuild)
+                {
+                    b.autoConnectProfiler = EditorGUILayout.Toggle("Auto Connect Profiler", b.autoConnectProfiler);
+                    b.deepProfiling = EditorGUILayout.Toggle("Deep Profiling", b.deepProfiling);
+                }
                 b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
 
                 DrawScenesSectionGUI(b);
                 DrawAdvancedOptionsSectionGUI(b);
-                DrawVRSectionGUI(b);
-            }
-            else
-            {
                 DrawAddressableSectionGUI(b);
+                DrawVRSectionGUI(b);
             }
         }
 
@@ -386,11 +388,6 @@ namespace Soma.Build
                 if (b.buildAddressables)
                 {
                     b.contentOnlyBuild = EditorGUILayout.Toggle("Build ContentOnly", b.contentOnlyBuild);
-                    if (b.contentOnlyBuild)
-                    {
-                        b.contentStateBinPathAddressable = $"Assets/AddressableAssetsData/{PlatformMappingService.GetPlatformPathSubFolder()}/addressables_content_state.bin";
-                        EditorGUILayout.LabelField("StateBinFile File", b.contentStateBinPathAddressable);
-                    }
                     b.profileNameAddressable = EditorGUILayout.TextField("Profile Name", b.profileNameAddressable);
    
                 }
